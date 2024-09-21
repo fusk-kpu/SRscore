@@ -1,0 +1,107 @@
+---
+title: "How to score genes based expression profiles across different research projects"
+author: "Yusuke Fukuda"
+output: 
+ BiocStyle::html_document:
+   toc: yes
+   fig_width: 5
+bibliography: life-v12-i07_20240801.bib
+vignette: >
+  %\VignetteIndexEntry{SRscore}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+`SRscore` is new approach for scoring genes based expression profiles across different research projects.
+
+`SRscore` is derived from the HNscore. [@life12071079]
+
+You should prepare for expression profiles and metadata to use `SRscore` function.
+This section presents the process of calculating `SRscore` using pre-prepared **test data**.
+
+- **Microarray**
+  - `TranscriptomeABA`
+  - `MetadataABA`
+  
+- **RNA-Seq** 
+  - `TPMHypoxia`
+  - `MetadataHypoxia`
+  
+Both `TranscriptomeABA` and `TPMHypoxia` are data frames with columns representing feature and samples.
+
+Both `MetadataABA` and `MetadataHypoxia` are data frames with columns 
+representing research project, control sample and treatment sample.
+
+```{r}
+library(SRscore)
+
+data("TranscriptomeABA")
+data("TPMHypoxia")
+
+head(TranscriptomeABA[, 1:6])
+head(TPMHypoxia[, 1:6])
+
+data("MetadataABA")
+data("MetadataHypoxia")
+
+head(MetadataABA)
+head(MetadataHypoxia)
+```
+
+# Procedure
+
+The calculation process is the same for Microarray and RNA-Seq. However, the difference depends on whether the data is log-transformed or not.
+`is.logarithmic` argument of `calculate_SRratio()` is `TRUE` if logarithmically converted, or `FALSE` if not. *`NA` (default) presents the user with menu to select `yes` or `no` in response to question.
+
+Since execution will stop midway, **it is basically recommended that either `TRUE` or `FALSE` be specified** when used in scripts.
+```{r}
+SRratio <- calculate_SRratio(TranscriptomeABA, "control_sample",
+                             "treated_sample", MetadataABA, is.logarithmic = TRUE)
+# SRratio <- calculate_SRratio(TPMHypoxia, "run_accession..normoxia.", 
+# "run_accession..hypoxia.", MetadataHypoxia, is.logarithmic = FALSE)
+
+SRscore <- calculate_SRscore(SRratio)
+
+head(SRscore)
+```
+
+Although SRscore can be calculated using the above procedure, the following procedure provides a new approach that considers all combinations of control and experimental samples within each research project.
+
+```{r setup}
+ebg <- expand_by_group(MetadataABA, control_sample, treated_sample, Series)
+
+SRratio <- calculate_SRratio(TranscriptomeABA, "control_sample",
+                             "treated_sample", ebg, is.logarithmic = TRUE)
+
+SRscore <- calculate_SRscore(SRratio)
+
+head(SRscore)
+```
+
+# Visualization
+
+## SRscore Distribution
+```{r}
+library(ggplot2)
+stc <- stack(SRscore, select = SR2)
+ggplot(stc, aes(x = values)) + 
+  geom_histogram(binwidth = 1) +
+  scale_x_continuous(breaks = seq(-20, 20, 2)) +
+  scale_y_log10()
+```
+
+# Session Information
+```{r}
+sessionInfo()
+```
+
+# References
