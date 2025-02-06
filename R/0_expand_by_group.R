@@ -1,25 +1,46 @@
-#' Create a data frame from all combinations between conditions by each research project
+#' Create a data frame from all combinations between two specified variables within each group
 #'
-#' You need to supply a data frame and at least three variables in the dataframe.
-#' This is useful when creating a data frame from all combinations of
-#' control conditions and treatment conditions across research projects.
+#' This function generates all combinations (Cartesian product) of two specified variables within each group of a given dataset.
+#' The resulting dataset is returned as a data frame, with rows containing NA values automatically filtered out.
 #'
-#' @param .data A data frame containing at least three variables.
-#' @param cnt An unquoted expression specifying the column of control conditions.
-#' @param trt An unquoted expression specifying the column of treatment conditions.
-#' @param .by An unquoted expression specifying the column of research projects.
+#'
+#' @param .data A data frame. The dataset to be processed.
+#' @param grp The variable (column name) used for grouping. Specify as a string.
+#' @param var1 The first variable to compare (column name). Specify as a string.
+#' @param var2 The second variable to compare (column name). Specify as a string.
 #'
 #' @return
-#' A data frame containing one row for each combination of the specified conditions.
+#' Returns a data frame containing all combinations of the specified variables (vr1 and vr2) for each group.
+#' The structure of the returned data frame includes:
 #'
-#' @importFrom dplyr enquo group_by filter_all all_vars %>%
+#' * All combinations of `var1` and `var2` within each group.
+#' * The group column (`grp`).
+#' * Rows with NA values removed.
+
+#'
+#' @importFrom dplyr group_by filter_all all_vars %>%
 #' @importFrom tidyr expand
+#' @importFrom rlang sym
 #'
 #' @examples
+#' data <- data.frame(
+#'   group = c("A", "A", "B", "B"),
+#'   var1 = c("a", "b", "c", "d"),
+#'   var2 = c("x", "y", "z", NA)
+#' )
+#'
+#' result <- expand_by_group(data, "group", "var1", "var2")
+#'
+#' print(result)
+#'
+#' grp <- "Series"
+#' var1 <- "control_sample"
+#' var2 <- "treated_sample"
+#'
 #' ebg <- expand_by_group(MetadataABA,
-#'                        control_sample,
-#'                        treated_sample,
-#'                        Series)
+#'                        grp,
+#'                        var1,
+#'                        var2)
 #'
 #' unique_series <- unique(MetadataABA$Series)
 #'
@@ -28,13 +49,11 @@
 #'
 #'
 #' @export
-expand_by_group <- function(.data, cnt, trt, .by) {
-
-  cnt <- enquo(cnt)
-  trt <- enquo(trt)
-  .by <- enquo(.by)
-
-  tbl <- .data %>% group_by(!!.by) %>% expand(!!cnt, !!trt)
-  tbl <- as.data.frame(tbl)
-  filter_all(tbl, all_vars(!is.na(.)))
+expand_by_group <- function(.data, grp, var1, var2) {
+  . <- NULL
+  .data %>%
+    group_by(!!sym(grp)) %>%
+    expand(!!sym(var1), !!sym(var2)) %>%
+    filter_all(dplyr::all_vars(!is.na(.))) %>%
+    as.data.frame()
 }

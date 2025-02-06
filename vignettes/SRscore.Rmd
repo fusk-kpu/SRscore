@@ -3,13 +3,23 @@ title: "How to score genes based expression profiles across different research p
 author: "Yusuke Fukuda"
 output: 
  BiocStyle::html_document:
+   highlight: pygments
    toc: yes
    fig_width: 5
+   number_sections: false
 bibliography: life-v12-i07_20240801.bib
 vignette: >
   %\VignetteIndexEntry{SRscore}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+abstract:
+  This vignette introduces the SRscore package, designed to
+  facilitate the analysis of gene expression data across various 
+  research projects. 
+  The following figure represents the process of deriving SRscore.
+  ![The process of deriving SRscore](Derivation_process_of_SRscore.png)
 ---
 
 ```{r, include = FALSE}
@@ -19,89 +29,240 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Introduction
+**R version**: `r R.version.string`
 
-`SRscore` is new approach for scoring genes based expression profiles across different research projects.
+**Bioconductor version**: `r BiocManager::version()`
 
-`SRscore` is derived from the HNscore. [@life12071079]
+**Package**: `r packageVersion("SRscore")`
 
-You should prepare for expression profiles and metadata to use `SRscore` function.
-This section presents the process of calculating `SRscore` using pre-prepared **test data**.
+<style type="text/css">
+.main-container {max-width: 1500px;}
+</style>
 
-- **Microarray**
-  - `TranscriptomeABA`
-  - `MetadataABA`
-  
-- **RNA-Seq** 
-  - `TPMHypoxia`
-  - `MetadataHypoxia`
-  
-Both `TranscriptomeABA` and `TPMHypoxia` are data frames with columns representing feature and samples.
 
-Both `MetadataABA` and `MetadataHypoxia` are data frames with columns 
-representing research project, control sample and treatment sample.
+# Introductions
+The development of the **SRscore** package emerged from the need to simplify and standardize the analysis of gene expression data across multiple research projects. In the field of transcriptomics, researchers often work with complex datasets that include a variety of control and treatment conditions, applied to different biological samples and experimental designs. This variety can make it challenging to consistently compare the effects of treatments on gene expression across studies.
 
+Traditionally, these comparisons have been carried out using ad-hoc scripts or custom workflows, which can be error-prone and difficult to reproduce. Furthermore, with increasing research projects and datasets, it is clear that there was a need for an efficient and automated method.
+
+**SRscore** package was developed to address these issues. It introduces a streamlined and reproducible workflow for generating control-treatment comparisons, calculating gene expression ratios, and scoring gene regulation patterns, enabling researchers to:
+
+- Automatically generate all control-treatment combinations across research projects.
+
+- Calculate gene expression ratios with flexibility to handle log-transformed or raw data.
+
+- Summarize results using an intuitive SRscore that helps researchers quickly identify significant gene expression changes across multiple datasets.
+
+The package simplifies analysis, enhances reproducibility, and helps researchers focus on interpreting the biological significance of their results, rather than spending time on data wrangling or manual calculations.
+
+# Installation
 ```{r}
 library(SRscore)
-
-data("TranscriptomeABA")
-data("TPMHypoxia")
-
-head(TranscriptomeABA[, 1:6])
-head(TPMHypoxia[, 1:6])
-
-data("MetadataABA")
-data("MetadataHypoxia")
-
-head(MetadataABA)
-head(MetadataHypoxia)
 ```
 
-# Procedure
 
-The calculation process is the same for Microarray and RNA-Seq. However, the difference depends on whether the data is log-transformed or not.
-`is.logarithmic` argument of `calculate_SRratio()` is `TRUE` if logarithmically converted, or `FALSE` if not. *`NA` (default) presents the user with menu to select `yes` or `no` in response to question.
+# Functions
+- expand_by_group(): Create a data frame from all combinations between two specified variables within each group
+- calcSRratio(): Calculates the gene expression ratio between control and treatment samples for each combination.
+- calcSRscore(): Computes the SRscore, summarizing the overall gene expression trends.
+- directly_calcSRscore():Aggregate the results of the above three functions into a single list
+- find_diffexp(): Find the expression ratio for each experimental sample for the specified gene.
 
-Since execution will stop midway, **it is basically recommended that either `TRUE` or `FALSE` be specified** when used in scripts.
+# Sample Data
+
+SRscoreを計算するにあたって、メタデータおよび遺伝子発現行列が必要です。以下はSRscoreパッケージに内蔵されているサンプルデータであり、`data()`から呼び出せる。
+
+## MetadataABA
+
+これはABAストレス条件下のシロイヌナズナに関連する実験データセットのメタデータです。ここで必要な情報は実験データセット、対照サンプル、実験サンプルそれぞれの識別IDであり、そのほかの情報は任意です。
+
+カラムの説明：
+
+- Series : 実験データセットの識別ID
+- control_sample : 対照サンプルの識別ID
+- treated_sample : 実験サンプルの識別ID
+- treatment : 処理内容（任意）
 ```{r}
-SRratio <- calculate_SRratio(TranscriptomeABA, "control_sample",
-                             "treated_sample", MetadataABA, is.logarithmic = TRUE)
-# SRratio <- calculate_SRratio(TPMHypoxia, "run_accession..normoxia.", 
-# "run_accession..hypoxia.", MetadataHypoxia, is.logarithmic = FALSE)
-
-SRscore <- calculate_SRscore(SRratio)
-
-head(SRscore)
+library(tibble)
+data("MetadataABA")
+tibble(MetadataABA)
 ```
 
-Although SRscore can be calculated using the above procedure, the following procedure provides a new approach that considers all combinations of control and experimental samples within each research project.
-
-```{r setup}
-ebg <- expand_by_group(MetadataABA, control_sample, treated_sample, Series)
-
-SRratio <- calculate_SRratio(TranscriptomeABA, "control_sample",
-                             "treated_sample", ebg, is.logarithmic = TRUE)
-
-SRscore <- calculate_SRscore(SRratio)
-
-head(SRscore)
+## TranscriptomeABA
+これはABAストレス条件下のシロイヌナズナに関連する実験データセットから抽出した遺伝子発現行列です。左端は遺伝子ID、その右側は全てサンプルごとの発現量を表しています。発現量データは生データ（CELファイル）として読み込まれ、Robust Multi-array Averageによってまとめて前処理されています。
+```{r}
+data("TranscriptomeABA")
+tibble(TranscriptomeABA)
 ```
+
+# Example Workflow
+ここではサンプルデータを用いたワークフローを紹介します。
+
+## 1. Expanding Condition Combinations Across Research Projects
+The first step in our workflow is generating all combinations of control and treatment conditions across research projects using the `expand_by_group()`.
+
+```{r}
+grp <- "Series"
+var1 <- "control_sample"
+var2 <- "treated_sample"
+
+ebg <- expand_by_group(.data = MetadataABA, 
+                       grp = grp,
+                       var1 = var1,
+                       var2 = var2)
+
+# View the unique research projects
+unique_series <- unique(MetadataABA$Series)
+unique_series
+
+# Subset the expanded data for each research project
+lapply(unique_series, function(x) subset(ebg, Series == x))
+```
+
+In this example, `expand_by_group()` takes a data frame (MetadataABA) and generates combinations of control and treatment samples for each research project (Series).
+
+## 2. Calculating SRratio
+Next, we use `calcSRratio()` to calculate gene expression ratios between control and treatment samples. This function allows you to specify whether the data is log-transformed.なお、計算式についてはAbstract内の画像を参照してください。
+
+```{r}
+SRratio <- calcSRratio(.data = TranscriptomeABA, 
+                       var1 = var1,
+                       var2 = var2, 
+                       pair = ebg, 
+                       is.log = TRUE)
+
+# Preview the SRratio data frame
+tibble(SRratio)
+```
+
+In this example, calcSRratio() calculates the gene expression ratios for control and treated samples based on the input data frame (TranscriptomeABA).
+
+なお、expand_by_group()を経由せずに直接SRratioを計算することも可能である。
+[@life12071079]ではこの計算方法が使用された。
+```{r}
+conventional_SRratio <- calcSRratio(TranscriptomeABA,
+                                          var1 = var1,
+                                          var2 = var2,
+                                          pair = MetadataABA, 
+                                          is.log = TRUE)
+# Preview the SRratio data frame
+tibble(conventional_SRratio)
+```
+
+## 3. Calculating SRscore
+Finally, we calculate the SRscore, a metric summarizing gene expression changes across conditions and projects.
+
+```{r}
+SRscore <- calcSRscore(SRratio)
+
+# Preview the SRscore results
+tibble(SRscore)
+```
+
+The calcSRscore() function takes the SRratio data frame and computes the SRscore, which reflects how many genes are significantly up- or down-regulated across the experiments.
+
+caluculate_SRscore()は単なる数値行列であれば利用可能で、今回の例に限らずあらゆる場面での活用が期待される。
+```{r}
+mt <- data.frame(X0 = runif(100)*3, 
+                 X1 = runif(100)*3, 
+                 X2 = runif(100)*3, 
+                 X3 = runif(100)*3, 
+                 X4 = runif(100)*3)
+smt <- calcSRscore(mt)
+tibble(smt)
+```
+
+## 4. In one go
+
+ここまでSRscoreの算出に至るまでの3つの関数を順に紹介してきた。`directly_calcSRscore()`は、これらの関数をまとめて実行し、それぞれの結果をリストに格納する。
+```{r}
+directSRscore <- directly_calcSRscore(.data1 = MetadataABA,
+                                            grp = grp,
+                                            var1 = var1,
+                                            var2 = var2,
+                                            .data2 = TranscriptomeABA,
+                                            is.log = TRUE)
+tibble(directSRscore$SRscore)
+```
+
 
 # Visualization
+SRscoreは様々な評価に用いることができる。以下はその例である。
 
-## SRscore Distribution
+## 指定した遺伝子の実験サンプルごとの発現パターンを調べる
+`find_diffexp()`は興味のある遺伝子（群）のSRratioとメタデータを抽出することができる。これにより、指定した遺伝子（群）がどの実験サンプルでどのような発現パターンを示したかがわかる。以下では、例としてAT1G10230を指定した。
 ```{r}
-library(ggplot2)
-stc <- stack(SRscore, select = SR2)
-ggplot(stc, aes(x = values)) + 
-  geom_histogram(binwidth = 1) +
-  scale_x_continuous(breaks = seq(-20, 20, 2)) +
-  scale_y_log10()
+set.seed(1)
+res <- find_diffexp(sample(SRratio$ensembl_gene_id, 1),
+                    SRratio,
+                    SRscore,
+                    MetadataABA)
+tibble(res$result)
+tibble(res$SRscore)
 ```
 
-# Session Information
+以下ではランダムな10遺伝子を指定した。
+
+```{r}
+set.seed(1)
+res2 <- find_diffexp(sample(SRratio$ensembl_gene_id, 10), 
+                     SRratio,
+                     SRscore,
+                     MetadataABA)
+
+tibble(res2$result)
+tibble(res2$SRscore)
+```
+
+複数の遺伝子を指定した場合は、ヒートマップにすると有益な情報が得られやすくなる。
+
+```{r}
+library(ComplexHeatmap)
+library(RColorBrewer)
+
+cor_breaks <- seq(-2, 2, length.out = 51)
+cor_color <- colorRampPalette(c("blue", "white", "red"))(51)
+annotation_row <- res2$result[, "treatment", drop = FALSE]
+treatment_names <- unique(annotation_row$treatment)
+pal <- brewer.pal(length(treatment_names),"Spectral")
+names(pal) <- treatment_names
+
+pheatmap(as.matrix(Filter(is.numeric, res2$result)),
+         breaks = cor_breaks,
+         color = cor_color,
+         annotation_row = annotation_row,
+         annotation_colors = list(treatment = pal),
+         cluster_rows = FALSE,
+         name = "SRratio")
+```
+
+<br>
+
+## SRscoreの値を利用してエンリッチメント解析を行う。
+SRscoreは特定の条件における発現レベルの変動が研究全体で特定の傾向に偏っているほど、0から大きく離れる数値である。そのため、それら一群の遺伝子がどのような生物学的機能を併せ持つかを理解することは重要である。以下は例としてSRscoreが1以上の遺伝子に対してGene Ontlogyエンリッチメント解析を行った結果である。
+```{r fig.width=9, fig.height=8}
+library(clusterProfiler)
+ego <- enrichGO(SRscore$ensembl_gene_id[which(SRscore$SR2 >= 1)],
+                OrgDb = "org.At.tair.db",
+                keyType = "TAIR",
+                ont = "BP",
+                maxGSSize = 2000
+                )
+dotplot(ego)
+```
+
+<br>
+
+# Summary of Outputs
+- Expanded Data Frame: Contains all combinations of control and treatment conditions for each research project.
+- SRratio: A data frame with gene expression ratios between control and treatment samples.
+- SRscore: A summary of gene expression changes, indicating up-regulated, down-regulated, and unchanged gene counts.
+
+By following this workflow, you can effectively analyze gene expression data across multiple conditions and research projects, gaining insights into the overall trends in gene expression. The SRscore package simplifies the process, making it easier to manage complex transcriptomic datasets.
+
+# Session Infomation
 ```{r}
 sessionInfo()
 ```
 
-# References
+<br>

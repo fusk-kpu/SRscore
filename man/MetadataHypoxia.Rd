@@ -3,14 +3,14 @@
 \docType{data}
 \name{MetadataHypoxia}
 \alias{MetadataHypoxia}
-\title{Metadata of Hypoxia stress RNA-Seq dataset in *Arabidopsis thaliana*}
+\title{Metadata of Hypoxia stress RNA-Seq dataset in \emph{Arabidopsis thaliana}}
 \format{
 A data frame with 29 rows and 4 variables:
 \describe{
-  \item{study_accession}{Research project ID}
-  \item{run_accession..hypoxia.}{RNA-Seq run accession ID}
-  \item{run_accession..normoxia.}{RNA-Seq run accession ID}
-  \item{Treatment}{treatment condition}
+\item{study_accession}{Research project ID}
+\item{run_accession..hypoxia.}{RNA-Seq run accession ID}
+\item{run_accession..normoxia.}{RNA-Seq run accession ID}
+\item{Treatment}{treatment condition}
 }
 }
 \usage{

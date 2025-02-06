@@ -2,32 +2,51 @@
 % Please edit documentation in R/0_expand_by_group.R
 \name{expand_by_group}
 \alias{expand_by_group}
-\title{Create a data frame from all combinations between conditions by each research project}
+\title{Create a data frame from all combinations between two specified variables within each group}
 \usage{
-expand_by_group(.data, cnt, trt, .by)
+expand_by_group(.data, grp, var1, var2)
 }
 \arguments{
-\item{.data}{A data frame containing at least three variables.}
+\item{.data}{A data frame. The dataset to be processed.}
 
-\item{cnt}{An unquoted expression specifying the column of control conditions.}
+\item{grp}{The variable (column name) used for grouping. Specify as a string.}
 
-\item{trt}{An unquoted expression specifying the column of treatment conditions.}
+\item{var1}{The first variable to compare (column name). Specify as a string.}
 
-\item{.by}{An unquoted expression specifying the column of research projects.}
+\item{var2}{The second variable to compare (column name). Specify as a string.}
 }
 \value{
-A data frame containing one row for each combination of the specified conditions.
+Returns a data frame containing all combinations of the specified variables (vr1 and vr2) for each group.
+The structure of the returned data frame includes:
+\itemize{
+\item All combinations of \code{var1} and \code{var2} within each group.
+\item The group column (\code{grp}).
+\item Rows with NA values removed.
+}
 }
 \description{
-You need to supply a data frame and at least three variables in the dataframe.
-This is useful when creating a data frame from all combinations of
-control conditions and treatment conditions across research projects.
+This function generates all combinations (Cartesian product) of two specified variables within each group of a given dataset.
+The resulting dataset is returned as a data frame, with rows containing NA values automatically filtered out.
 }
 \examples{
+data <- data.frame(
+  group = c("A", "A", "B", "B"),
+  var1 = c("a", "b", "c", "d"),
+  var2 = c("x", "y", "z", NA)
+)
+
+result <- expand_by_group(data, "group", "var1", "var2")
+
+print(result)
+
+grp <- "Series"
+var1 <- "control_sample"
+var2 <- "treated_sample"
+
 ebg <- expand_by_group(MetadataABA,
-                       control_sample,
-                       treated_sample,
-                       Series)
+                       grp,
+                       var1,
+                       var2)
 
 unique_series <- unique(MetadataABA$Series)
 

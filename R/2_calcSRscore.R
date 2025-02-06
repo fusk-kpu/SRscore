@@ -8,15 +8,25 @@
 #' @return A data frame containing results.
 #'
 #' @examples
-#' ebg <- expand_by_group(MetadataABA, control_sample, treated_sample, Series)
+#' grp <- "Series"
+#' var1 <- "control_sample"
+#' var2 <- "treated_sample"
 #'
-#' SRratio <- calculate_SRratio(TranscriptomeABA, "control_sample",
-#'                              "treated_sample", ebg, is.logarithmic = 1)
+#' ebg <- expand_by_group(MetadataABA,
+#'                        grp,
+#'                        var1,
+#'                        var2)
 #'
-#' head(calculate_SRscore(SRratio))
+#' SRratio <- calcSRratio(TranscriptomeABA,
+#'                        var1,
+#'                        var2,
+#'                        ebg,
+#'                        is.log = 1)
+#'
+#' head(calcSRscore(SRratio))
 #'
 #' @export
-calculate_SRscore <- function(SRratio) {
+calcSRscore <- function(SRratio) {
   SRratio_keep <- Filter(is.numeric, SRratio)
 
   thre <- SRratio_keep >= 1
