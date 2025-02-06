@@ -1,16 +1,14 @@
 #' Create a data frame from all combinations between two specified variables within each group
 #'
-#' This function generates all combinations (Cartesian product) of two specified variables within each group of a given dataset.
-#' The resulting dataset is returned as a data frame, with rows containing NA values automatically filtered out.
+#' `expand_by_group()` generates all combinations (Cartesian product) of two specified variables within each group in your dataframe.
 #'
-#'
-#' @param .data A data frame. The dataset to be processed.
-#' @param grp The variable (column name) used for grouping. Specify as a string.
-#' @param var1 The first variable to compare (column name). Specify as a string.
-#' @param var2 The second variable to compare (column name). Specify as a string.
+#' @param .data A data frame.
+#' @param grp A column name indicating the group.
+#' @param var1 A column name indicating the control.
+#' @param var2 A column name indicating the treatment.
 #'
 #' @return
-#' Returns a data frame containing all combinations of the specified variables (vr1 and vr2) for each group.
+#' Returns a data frame containing all combinations of the specified variables for each group.
 #' The structure of the returned data frame includes:
 #'
 #' * All combinations of `var1` and `var2` within each group.
@@ -23,16 +21,6 @@
 #' @importFrom rlang sym
 #'
 #' @examples
-#' data <- data.frame(
-#'   group = c("A", "A", "B", "B"),
-#'   var1 = c("a", "b", "c", "d"),
-#'   var2 = c("x", "y", "z", NA)
-#' )
-#'
-#' result <- expand_by_group(data, "group", "var1", "var2")
-#'
-#' print(result)
-#'
 #' grp <- "Series"
 #' var1 <- "control_sample"
 #' var2 <- "treated_sample"

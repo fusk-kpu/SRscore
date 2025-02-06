@@ -21,28 +21,6 @@
 #' * Mean SRratio values for each unique target variable.
 #'
 #' @examples
-#' data1 <- data.frame(
-#'   group = c("A", "A", "B", "B"),
-#'   var1 = c("a", "b", "c", "d"),
-#'   var2 = c("x", "y", "z", NA)
-#' )
-#'
-#' ebg <- expand_by_group(data1, "group", "var1", "var2")
-#'
-#' data2 <- data.frame(
-#'   Gene = c("Gene1", "Gene2", "Gene3"),
-#'   a = c(10, 15, 20),
-#'   b = c(20, 25, 30),
-#'   c = c(25, 30, 35),
-#'   d = c(30, 35, 40),
-#'   x = c(35, 40, 45),
-#'   y = c(40, 45, 50),
-#'   z = c(45, 50, 55)
-#' )
-#'
-#' result <- calcSRratio(data2, "var1", "var2", ebg, is.log = FALSE)
-#' print(result)
-#'
 #' var1 <- "control_sample"
 #' var2 <- "treated_sample"
 #' grp <- "Series"

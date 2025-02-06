@@ -7,16 +7,16 @@
 expand_by_group(.data, grp, var1, var2)
 }
 \arguments{
-\item{.data}{A data frame. The dataset to be processed.}
+\item{.data}{A data frame.}
 
-\item{grp}{The variable (column name) used for grouping. Specify as a string.}
+\item{grp}{A column name indicating the group.}
 
-\item{var1}{The first variable to compare (column name). Specify as a string.}
+\item{var1}{A column name indicating the control.}
 
-\item{var2}{The second variable to compare (column name). Specify as a string.}
+\item{var2}{A column name indicating the treatment.}
 }
 \value{
-Returns a data frame containing all combinations of the specified variables (vr1 and vr2) for each group.
+Returns a data frame containing all combinations of the specified variables for each group.
 The structure of the returned data frame includes:
 \itemize{
 \item All combinations of \code{var1} and \code{var2} within each group.
@@ -25,20 +25,9 @@ The structure of the returned data frame includes:
 }
 }
 \description{
-This function generates all combinations (Cartesian product) of two specified variables within each group of a given dataset.
-The resulting dataset is returned as a data frame, with rows containing NA values automatically filtered out.
+\code{expand_by_group()} generates all combinations (Cartesian product) of two specified variables within each group in your dataframe.
 }
 \examples{
-data <- data.frame(
-  group = c("A", "A", "B", "B"),
-  var1 = c("a", "b", "c", "d"),
-  var2 = c("x", "y", "z", NA)
-)
-
-result <- expand_by_group(data, "group", "var1", "var2")
-
-print(result)
-
 grp <- "Series"
 var1 <- "control_sample"
 var2 <- "treated_sample"

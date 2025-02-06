@@ -190,7 +190,8 @@ tibble(directSRscore$SRscore)
 SRscoreは様々な評価に用いることができる。以下はその例である。
 
 ## 指定した遺伝子の実験サンプルごとの発現パターンを調べる
-`find_diffexp()`は興味のある遺伝子（群）のSRratioとメタデータを抽出することができる。これにより、指定した遺伝子（群）がどの実験サンプルでどのような発現パターンを示したかがわかる。以下では、例としてAT1G10230を指定した。
+`find_diffexp()`は興味のある遺伝子（群）のSRratioとメタデータを抽出することができる。これにより、指定した遺伝子（群）がどの実験サンプルでどのような発現パターンを示したかがわかる。
+以下では、例としてAT1G10230を指定した。
 ```{r}
 set.seed(1)
 res <- find_diffexp(sample(SRratio$ensembl_gene_id, 1),
@@ -239,7 +240,7 @@ pheatmap(as.matrix(Filter(is.numeric, res2$result)),
 <br>
 
 ## SRscoreの値を利用してエンリッチメント解析を行う。
-SRscoreは特定の条件における発現レベルの変動が研究全体で特定の傾向に偏っているほど、0から大きく離れる数値である。そのため、それら一群の遺伝子がどのような生物学的機能を併せ持つかを理解することは重要である。以下は例としてSRscoreが1以上の遺伝子に対してGene Ontlogyエンリッチメント解析を行った結果である。
+SRscoreは特定の条件における発現レベルの変動が研究全体で特定の傾向に偏っているほど、0から大きく離れる数値である。そのため、SRscoreに基づいて抽出した一群の遺伝子がどのような生物学的機能を併せ持つかを理解することは重要である。以下は例としてSRscoreが1以上の遺伝子に対してGene Ontlogyエンリッチメント解析を行った結果である。
 ```{r fig.width=9, fig.height=8}
 library(clusterProfiler)
 ego <- enrichGO(SRscore$ensembl_gene_id[which(SRscore$SR2 >= 1)],
