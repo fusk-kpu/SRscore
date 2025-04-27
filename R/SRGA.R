@@ -1,0 +1,25 @@
+#' Test data for template mathing using sample data
+#'
+#'
+#'
+#'
+#' @format A data frame with 1000 rows and 14 variables:
+#' \describe{
+#'   \item{ensembl_gene_id}{Ensembl gene ID}
+#'   \item{ABA}{SRscore derived from ABA dataset}
+#'   \item{cold}{SRscore derived from cold dataset}
+#'   \item{DC3000}{SRscore derived from DC3000 dataset}
+#'   \item{drought}{SRscore derived from drought dataset}
+#'   \item{heat}{SRscore derived from heat dataset}
+#'   \item{highlight}{SRscore derived from highlight dataset}
+#'   \item{hypoxia}{SRscore derived from hypoxia dataset}
+#'   \item{osmotic}{SRscore derived from osmotic dataset}
+#'   \item{oxidation}{SRscore derived from oxidation dataset}
+#'   \item{salt}{SRscore derived from salt dataset}
+#'   \item{wound}{SRscore derived from wound dataset}
+#'   \item{SYMBOL}{Gene symbol}
+#'   \item{description}{Gene description}
+#' }
+#'
+#'
+"SRGA"

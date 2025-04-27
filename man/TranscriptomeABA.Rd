@@ -5,53 +5,20 @@
 \alias{TranscriptomeABA}
 \title{Abscisic acid stress microarray dataset in \emph{Arabidopsis thaliana}}
 \format{
-A data frame with 1000 rows and 39 variables:
-\describe{
-\item{ensembl_gene_id}{Ensembl gene ID}
-\item{GSM153922}{Sample ID}
-\item{GSM153923}{Sample ID}
-\item{GSM153924}{Sample ID}
-\item{GSM153925}{Sample ID}
-\item{GSM170896}{Sample ID}
-\item{GSM170897}{Sample ID}
-\item{GSM170923}{Sample ID}
-\item{GSM170931}{Sample ID}
-\item{GSM4012617}{Sample ID}
-\item{GSM4012618}{Sample ID}
-\item{GSM4012619}{Sample ID}
-\item{GSM4012620}{Sample ID}
-\item{GSM4012621}{Sample ID}
-\item{GSM4012622}{Sample ID}
-\item{GSM486916}{Sample ID}
-\item{GSM486917}{Sample ID}
-\item{GSM486918}{Sample ID}
-\item{GSM486928}{Sample ID}
-\item{GSM486929}{Sample ID}
-\item{GSM486930}{Sample ID}
-\item{GSM713249}{Sample ID}
-\item{GSM713250}{Sample ID}
-\item{GSM713251}{Sample ID}
-\item{GSM713255}{Sample ID}
-\item{GSM713256}{Sample ID}
-\item{GSM713257}{Sample ID}
-\item{GSM967132}{Sample ID}
-\item{GSM967133}{Sample ID}
-\item{GSM967140}{Sample ID}
-\item{GSM967141}{Sample ID}
-\item{GSM967148}{Sample ID}
-\item{GSM967149}{Sample ID}
-\item{GSM967156}{Sample ID}
-\item{GSM967157}{Sample ID}
-\item{GSM967164}{Sample ID}
-\item{GSM967165}{Sample ID}
-\item{GSM967172}{Sample ID}
-\item{GSM967173}{Sample ID}
-}
+An object of class \code{data.frame} with 1000 rows and 39 columns.
 }
 \usage{
 TranscriptomeABA
 }
 \description{
-Abscisic acid stress microarray dataset in \emph{Arabidopsis thaliana}
+This is a gene expression matrix for Arabidopsis under ABA stress conditions.
+The first column is the gene ID column, all others are sample ID columns.
+The expression data are read as raw data (CEL files) and summarized and normalized by Robust Multi-array Average (RMA).
+To keep the file size small, the data is limited to 1,000 genes.
+}
+\details{
+Column components :
+
+Ensembl gene id + 38 sample id (control : 19, treatment : 19)
 }
 \keyword{datasets}
