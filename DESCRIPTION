@@ -1,17 +1,24 @@
 Package: SRscore
 Type: Package
-Title: What the Package Does (Title Case)
+Title: SRscore: Simple Transcriptome Meta-analysis for Identifying Stress-Responsive Genes
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author:  Yusuke Fukuda [aut, cre], Atsushi Fukushima [aut]
+Maintainer: Yusuke Fukuda <yourself@somewhere.net>
+Description: Stress Response score (SRscore) is a stress responsiveness 
+    measure for transcriptome datasets and is based on the vote-counting 
+    method. The SRscore is determined to evaluate and scores genes on the 
+    basis of the consistency of the direction of their regulation 
+    (Up-regulation, Down-regulation, or No changed) under stress conditions 
+    across the analyzed, multiple research projects. This package is based on 
+    the HN-score of Tamura and Bono (2022), and can calculate both 
+    the original method and the calculation method we have extended 
+    (Fukuda et al. 2025).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
-Imports: dplyr, tidyr, utils, rlang, Biobase, SummarizedExperiment
+Imports: dplyr, tidyr, utils, rlang, Biobase, SummarizedExperiment 
 Suggests: 
     knitr,
     rmarkdown,
@@ -20,10 +27,12 @@ Suggests:
     tibble,
     ComplexHeatmap,
     clusterProfiler,
+    org.At.tair.db,
+    BiocStyle,    
     RColorBrewer,
     genefilter,
     DT
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)
