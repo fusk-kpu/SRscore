@@ -4,6 +4,7 @@
 #' SRratio is required to calculate SRscore.
 #'
 #' @param SRratio A data frame of SRratio.
+#' @param threshold A vector of length 2 (x, y) indicating threshold values. `c(-2, 2)` is default.
 #'
 #' @return A data frame containing results.
 #'
@@ -26,30 +27,22 @@
 #' head(calcSRscore(SRratio))
 #'
 #' @export
-calcSRscore <- function(SRratio) {
+calcSRscore <- function(SRratio, threshold = c(-2, 2)) {
   SRratio_keep <- Filter(is.numeric, SRratio)
 
-  thre <- SRratio_keep >= 1
-  up1 <- rowSums(thre)
+  thre <- SRratio_keep <= threshold[1]
+  dn <- rowSums(thre)
 
-  thre <- SRratio_keep >= 2
-  up2 <- rowSums(thre)
-
-  thre <- SRratio_keep <= -1
-  dn1 <- rowSums(thre)
-
-  thre <- SRratio_keep <= -2
-  dn2 <- rowSums(thre)
+  thre <- SRratio_keep >= threshold[2]
+  up <- rowSums(thre)
 
   all <- ncol(SRratio_keep)
 
-  unchange1 <- all - up1 - dn1
-  unchange2 <- all - up2 - dn2
+  unchange <- all - up - dn
 
-  SR1 <- up1 - dn1
-  SR2 <- up2 - dn2
+  score <- up - dn
 
-  SRscore <- cbind(up1, up2, dn1, dn2, unchange1, unchange2, all, SR1, SR2)
+  SRscore <- cbind(up, dn, unchange, all, score)
   SRscore <- as.data.frame(SRscore)
   SRscore <- cbind(Filter(is.character, SRratio), SRscore)
   SRscore

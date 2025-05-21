@@ -39,9 +39,9 @@
 #' @export
 directly_calcSRscore <- function(.data1, grp, var1, var2, .data2, is.log = NA) {
 
-  # Creating a data frame including all possible combinations of two variables within each groups.
+  # Creating a data frame including all possible pairs of two variables within each groups.
   . <- NULL
-  combinations <- .data1 %>%
+  pairs <- .data1 %>%
     group_by(!!sym(grp)) %>%
     expand(!!sym(var1), !!sym(var2)) %>%
     filter_all(all_vars(!is.na(.))) %>%
@@ -49,11 +49,11 @@ directly_calcSRscore <- function(.data1, grp, var1, var2, .data2, is.log = NA) {
 
   f <- function(x) gsub("-", "_", x)
   colnames(.data2) <- f(colnames(.data2))
-  combinations <- data.frame(apply(combinations, 2, f))
+  pairs <- data.frame(apply(pairs, 2, f))
 
   ratio <- function(i){
-    var2_side <- combinations[i, var2]
-    var1_side <- combinations[i, var1]
+    var2_side <- pairs[i, var2]
+    var1_side <- pairs[i, var1]
     if (is.na(is.log)) {
       switch (
         menu(c("yes", "no"), title = "Is the data log-transformed?"),
@@ -67,10 +67,10 @@ directly_calcSRscore <- function(.data1, grp, var1, var2, .data2, is.log = NA) {
     }
   }
 
-  SRratio <- data.frame(ratio(1:nrow(combinations)))
+  SRratio <- data.frame(ratio(1:nrow(pairs)))
 
   SRratio_mean <- Filter(is.character, .data2)
-  var2_samples <- unique(as.vector(combinations[var2])[[var2]])
+  var2_samples <- unique(as.vector(pairs[var2])[[var2]])
 
   for (i in seq_along(var2_samples)) {
     grp <- grep(var2_samples[i], colnames(SRratio))
@@ -109,7 +109,7 @@ directly_calcSRscore <- function(.data1, grp, var1, var2, .data2, is.log = NA) {
   SRscore <- cbind(up1, up2, dn1, dn2, unchange1, unchange2, all, SR1, SR2)
   SRscore <- as.data.frame(SRscore)
   SRscore <- cbind(Filter(is.character, SRratio_mean), SRscore)
-  list(combinations = combinations,
+  list(pairs = pairs,
        SRratio = SRratio_mean,
        SRscore = SRscore)
 }

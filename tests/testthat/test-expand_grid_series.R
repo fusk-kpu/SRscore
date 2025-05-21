@@ -9,10 +9,10 @@ test_that("multiplication works", {
   expect_equal(calcSRratio(TPMHypoxia, "run_accession..normoxia.", "run_accession..hypoxia.", MetadataHypoxia, is.log = FALSE),
                logHNratioHypoxia)
 
-  expect_equal(calcSRscore(SRratio_test),
-               SRscore_test)
+  expect_equal(calcSRscore(SRratio_test)$score,
+               SRscore_test$SR2)
 
-  expect_equal(as.numeric(unlist(calcSRscore(logHNratioHypoxia)["SR1"])),
+  expect_equal(as.numeric(unlist(calcSRscore(logHNratioHypoxia, threshold = c(-1, 1))["score"])),
                HNscore$HN.score)
 
   expect_equal(length(find_diffexp(sample(SRratio_test[, 1], 1), SRratio_test, SRscore_test, MetadataABA)), 2)
