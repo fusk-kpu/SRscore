@@ -287,7 +287,7 @@ ComplexHeatmap::pheatmap(
 Genes with consistently altered expression (higher |SRscore|) can be analyzed for functional enrichment.
 Example: GO enrichment for genes with SRscore ≥ 1 using *clusterProfiler* [@Yu2012-si].
 
-```{r eval=FALSE}
+```{r}
 library(clusterProfiler)
 library(ggplot2)
 
