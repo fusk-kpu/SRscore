@@ -4,10 +4,10 @@
 \alias{calcSRscore}
 \title{Create a Data Frame of SRscore}
 \usage{
-calcSRscore(SRratio, threshold = c(-2, 2))
+calcSRscore(srratio, threshold = c(-2, 2))
 }
 \arguments{
-\item{SRratio}{A data frame of SRratio.}
+\item{srratio}{A data frame of SRratio.}
 
 \item{threshold}{A vector of length 2 (x, y) indicating threshold values. \code{c(-2, 2)} is default.}
 }

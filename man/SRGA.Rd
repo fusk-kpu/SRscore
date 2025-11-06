@@ -3,30 +3,32 @@
 \docType{data}
 \name{SRGA}
 \alias{SRGA}
-\title{Test data for template mathing using sample data}
+\title{Test data for template matching using sample data}
 \format{
-A data frame with 1000 rows and 14 variables:
+A data frame with 1000 rows and 13 variables:
 \describe{
 \item{ensembl_gene_id}{Ensembl gene ID}
 \item{ABA}{SRscore derived from ABA dataset}
-\item{cold}{SRscore derived from cold dataset}
+\item{Cold}{SRscore derived from cold dataset}
 \item{DC3000}{SRscore derived from DC3000 dataset}
-\item{drought}{SRscore derived from drought dataset}
-\item{heat}{SRscore derived from heat dataset}
-\item{highlight}{SRscore derived from highlight dataset}
-\item{hypoxia}{SRscore derived from hypoxia dataset}
-\item{osmotic}{SRscore derived from osmotic dataset}
-\item{oxidation}{SRscore derived from oxidation dataset}
-\item{salt}{SRscore derived from salt dataset}
-\item{wound}{SRscore derived from wound dataset}
+\item{Drought}{SRscore derived from drought dataset}
+\item{Heat}{SRscore derived from heat dataset}
+\item{High-light}{SRscore derived from highlight dataset}
+\item{Hypoxia}{SRscore derived from hypoxia dataset}
+\item{Osmotic}{SRscore derived from osmotic dataset}
+\item{Oxidation}{SRscore derived from oxidation dataset}
+\item{Salt}{SRscore derived from salt dataset}
+\item{Wound}{SRscore derived from wound dataset}
 \item{SYMBOL}{Gene symbol}
-\item{description}{Gene description}
 }
 }
 \usage{
 SRGA
 }
 \description{
-Test data for template mathing using sample data
+SRGA is a data frame integrating SRscores across 11 distinct stress conditions(Fukuda et al., 2025).
+Since the SR score scale varies by stress type, it was standardized using z-scores.
+To reduce file size, only 1,000 genes are included.
+By utilizing template matching (Pavlidis and Noble 2001), genes exhibiting similar SRscore patterns under each stress condition can be extracted.
 }
 \keyword{datasets}

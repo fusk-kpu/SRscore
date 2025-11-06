@@ -9,7 +9,7 @@ Installation
 ```R
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install(c("ComplexHeatmap", "clusterProfiler", 
+BiocManager::install(c("BiocStyle", "ComplexHeatmap", "clusterProfiler", 
                        "org.At.tair.db", "genefilter"))
 
 install.packages(c("RColorBrewer", "DT"))

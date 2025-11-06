@@ -38,7 +38,7 @@ var1 <- "control_sample"
 var2 <- "treated_sample"
 grp <- "Series"
 
-ebg <- expand_by_group(MetadataABA, var1, var2, grp)
+ebg <- expand_by_group(MetadataABA, grp, var1, var2)
 
 SRratio <- calcSRratio(TranscriptomeABA, var1, var2, ebg, is.log = TRUE)
 

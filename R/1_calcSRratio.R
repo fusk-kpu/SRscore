@@ -25,7 +25,7 @@
 #' var2 <- "treated_sample"
 #' grp <- "Series"
 #'
-#' ebg <- expand_by_group(MetadataABA, var1, var2, grp)
+#' ebg <- expand_by_group(MetadataABA, grp, var1, var2)
 #'
 #' SRratio <- calcSRratio(TranscriptomeABA, var1, var2, ebg, is.log = TRUE)
 #'
@@ -43,7 +43,7 @@ calcSRratio <- function(.data, var1, var2, pair, is.log = NA) {
 
     if (is.na(is.log)) {
     switch (
-      menu(c("yes", "no"), title = "Is the data log-transformed?"),
+      menu(c("yes", "no"), title = "Is the data log2-transformed?"),
          {.data[, t] - .data[, c]},
          {log2((.data[, t] + 1) / (.data[, c] + 1))}
          )
@@ -53,10 +53,10 @@ calcSRratio <- function(.data, var1, var2, pair, is.log = NA) {
       log2((.data[, t] + 1) / (.data[, c] + 1))
     }
   }
-
   SRratio <- data.frame(ratio(1:nrow(pair)))
 
-  SRratio_mean <- Filter(is.character, .data)
+  cl <- setdiff(colnames(.data), c(pair[, var1], pair[, var2]))
+  SRratio_mean <- .data[cl]
   treated_sample <- unique(as.vector(pair[var2])[[var2]])
 
   for (i in seq_along(treated_sample)) {
@@ -68,7 +68,6 @@ calcSRratio <- function(.data, var1, var2, pair, is.log = NA) {
     }
   }
 
-  colnames(SRratio_mean) <- c(names(Filter(is.character, .data)),
-                              unique(gsub("\\..+", "", unique(colnames(SRratio)))))
+  colnames(SRratio_mean) <- c(cl, unique(gsub("\\..+", "", colnames(SRratio))))
   SRratio_mean
 }

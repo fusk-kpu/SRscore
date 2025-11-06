@@ -3,7 +3,7 @@
 #' SRscore is score value of genes based expression profiles across different research projects.
 #' SRratio is required to calculate SRscore.
 #'
-#' @param SRratio A data frame of SRratio.
+#' @param srratio A data frame of SRratio.
 #' @param threshold A vector of length 2 (x, y) indicating threshold values. `c(-2, 2)` is default.
 #'
 #' @return A data frame containing results.
@@ -27,23 +27,28 @@
 #' head(calcSRscore(SRratio))
 #'
 #' @export
-calcSRscore <- function(SRratio, threshold = c(-2, 2)) {
-  SRratio_keep <- Filter(is.numeric, SRratio)
+calcSRscore <- function(srratio, threshold = c(-2, 2)) {
 
-  thre <- SRratio_keep <= threshold[1]
+  cl <- sapply(srratio, function(x) {
+    any(x > 0, na.rm = TRUE) && any(x < 0, na.rm = TRUE)
+  })
+
+  srratio_keep <- srratio[cl]
+
+  thre <- srratio_keep <= threshold[1]
   dn <- rowSums(thre)
 
-  thre <- SRratio_keep >= threshold[2]
+  thre <- srratio_keep >= threshold[2]
   up <- rowSums(thre)
 
-  all <- ncol(SRratio_keep)
+  all <- ncol(srratio_keep)
 
   unchange <- all - up - dn
 
   score <- up - dn
 
-  SRscore <- cbind(up, dn, unchange, all, score)
-  SRscore <- as.data.frame(SRscore)
-  SRscore <- cbind(Filter(is.character, SRratio), SRscore)
-  SRscore
+  srscore <- cbind(up, dn, unchange, all, score)
+  srscore <- as.data.frame(srscore)
+  srscore <- cbind(Filter(is.character, srratio), srscore)
+  srscore
 }

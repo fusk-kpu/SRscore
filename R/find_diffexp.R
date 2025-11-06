@@ -34,11 +34,17 @@
 #'
 #' @export
 find_diffexp <- function(genes, srratio, srscore, metadata) {
-  flt <- Filter(is.numeric,
-                srratio[apply(Filter(is.character, srratio), 1, function(g) g %in% genes), ])
+
+  cl <- !sapply(srratio, function(x) {
+    any(x > 0, na.rm = TRUE) && any(x < 0, na.rm = TRUE)
+    })
+  flt <- srratio[apply(srratio[cl], 1, function(g) g %in% genes), ]
+  flt <- flt[, sapply(flt, is.numeric)]
   rownames(flt) <- sort(genes)
   flt <- t(flt)
+  class(metadata) <- "data.frame"
   rownames(flt) <- metadata[, (apply(metadata, 2, function(col) all(col %in% colnames(srratio))))]
   list(result = cbind(metadata, flt),
        SRscore = srscore[which(unlist(Filter(is.character, srratio)) %in% genes), ])
 }
+

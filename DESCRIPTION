@@ -3,7 +3,14 @@ Type: Package
 Title: SRscore: Simple Transcriptome Meta-analysis for Identifying Stress-Responsive Genes
 Version: 0.1.0
 Author:  Yusuke Fukuda [aut, cre], Atsushi Fukushima [aut]
-Maintainer: Yusuke Fukuda <yourself@somewhere.net>
+Authors@R: c(person(given = "Yusuke",
+                    family = "Fukuda",
+                    role = c("aut", "cre"),
+                    email = "s823631038@kpu.ac.jp"),
+              person(given = "Atsushi",
+                    family = "Fukushima",
+                    role = "aut"))
+Maintainer: Yusuke Fukuda <s823631038@kpu.ac.jp>
 Description: Stress Response score (SRscore) is a stress responsiveness 
     measure for transcriptome datasets and is based on the vote-counting 
     method. The SRscore is determined to evaluate and scores genes on the 
