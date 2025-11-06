@@ -27,7 +27,7 @@ browseVignettes("SRscore")
 
 Updates
 ------------
-#### version 0.1.0 (May 7, 2025)
+#### version 0.2.0 (November 6, 2025)
 
 License
 ------------
