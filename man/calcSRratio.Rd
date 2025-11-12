@@ -4,7 +4,7 @@
 \alias{calcSRratio}
 \title{Calculate the Stress Response ratio (SRratio)}
 \usage{
-calcSRratio(.data, var1, var2, pair, is.log = NA)
+calcSRratio(.data, var1, var2, pair, is.log2 = NA)
 }
 \arguments{
 \item{.data}{A data frame containing expression values for a series of arrays, with rows corresponding to genes and columns to samples.}
@@ -15,7 +15,7 @@ calcSRratio(.data, var1, var2, pair, is.log = NA)
 
 \item{pair}{A data frame with control samples and treatment samples.}
 
-\item{is.log}{A logical value (TRUE, FALSE) or NA indicating whether the data in .data is log-transformed:
+\item{is.log2}{A logical value (TRUE, FALSE) or NA indicating whether the data in .data is log-transformed:
 \itemize{
 \item If TRUE, the SR ratio is calculated as the difference between the target and reference variables.
 \item If FALSE, the SR ratio is calculated as the log2-transformed ratio: log2((target + 1) / (reference + 1)).
@@ -40,6 +40,6 @@ grp <- "Series"
 
 ebg <- expand_by_group(MetadataABA, grp, var1, var2)
 
-SRratio <- calcSRratio(TranscriptomeABA, var1, var2, ebg, is.log = TRUE)
+SRratio <- calcSRratio(TranscriptomeABA, var1, var2, ebg, is.log2 = TRUE)
 
 }

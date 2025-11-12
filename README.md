@@ -25,6 +25,27 @@ library(SRscore)
 browseVignettes("SRscore")
 ```
 
+The *SRscore* package is designed to facilitate meta-analysis 
+methods based on vote-counting. 
+It contains three main functions for calculating the SRscore, 
+which represents a numerical value indicating a gene's stress 
+responsiveness among multiple studies. 
+Using the `expand_by_groups()` function, 
+it is possible to generate a table pairing all possible combinations of two groups, 
+which can be arranged in two columns. To mitigate batch effects,
+the function only generates pairs among samples within a given dataset (e.g., NCBI GEO series). 
+When the table thus acquired is used as an input to execute the `calc_SRratio()` function,
+this function calculates a value designated the Stress Response ratio (SRratio) and, 
+which is stored in an SRratio matrix (gene × sample). 
+SRratio represents the gene expression level and is calculated similarly to a log2 fold change.
+Using this matrix as an input, executing the `calc_SRscore()` function yields a gene-specific SRscore.
+
+The primary feature of the *SRscore* package is its capacity to perform cross-comparative analysis
+of multiple datasets and to estimate consistent changes in gene expression levels.
+Commencing with the import of metadata and expression data, 
+the package implements a sequential workflow that includes inter-group comparisons within each dataset, 
+calculation of integrated scores via meta-analysis, and visualization and export of the results.
+
 Updates
 ------------
 #### version 0.2.0 (November 6, 2025)

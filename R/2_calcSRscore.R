@@ -4,7 +4,7 @@
 #' SRratio is required to calculate SRscore.
 #'
 #' @param srratio A data frame of SRratio.
-#' @param threshold A vector of length 2 (x, y) indicating threshold values. `c(-2, 2)` is default.
+#' @param threshold A vector of length 2 (x, y) indicating threshold values. `c(-1, 1)` is default.
 #'
 #' @return A data frame containing results.
 #'
@@ -22,12 +22,12 @@
 #'                        var1,
 #'                        var2,
 #'                        ebg,
-#'                        is.log = 1)
+#'                        is.log2 = TRUE)
 #'
-#' head(calcSRscore(SRratio))
+#' head(calcSRscore(SRratio, threshold = c(-1, 1)))
 #'
 #' @export
-calcSRscore <- function(srratio, threshold = c(-2, 2)) {
+calcSRscore <- function(srratio, threshold = c(-1, 1)) {
 
   cl <- sapply(srratio, function(x) {
     any(x > 0, na.rm = TRUE) && any(x < 0, na.rm = TRUE)

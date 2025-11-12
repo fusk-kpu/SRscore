@@ -3,13 +3,13 @@ test_that("multiplication works", {
   expect_equal(nrow(expand_by_group(MetadataABA, "Series", "control_sample", "treated_sample")),
                nrow(sample_pair_test))
 
-  expect_equal(calcSRratio(TranscriptomeABA, "control_sample", "treated_sample", sample_pair_test, is.log = TRUE),
+  expect_equal(calcSRratio(TranscriptomeABA, "control_sample", "treated_sample", sample_pair_test, is.log2 = TRUE),
                SRratio_test)
 
-  expect_equal(calcSRratio(TPMHypoxia, "run_accession..normoxia.", "run_accession..hypoxia.", MetadataHypoxia, is.log = FALSE),
+  expect_equal(calcSRratio(TPMHypoxia, "run_accession..normoxia.", "run_accession..hypoxia.", MetadataHypoxia, is.log2 = FALSE),
                logHNratioHypoxia)
 
-  expect_equal(calcSRscore(SRratio_test)$score,
+  expect_equal(calcSRscore(SRratio_test, threshold = c(-2, 2))$score,
                SRscore_test$SR2)
 
   expect_equal(as.numeric(unlist(calcSRscore(logHNratioHypoxia, threshold = c(-1, 1))["score"])),

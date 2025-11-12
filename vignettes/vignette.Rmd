@@ -4,6 +4,7 @@ author: "Yusuke Fukuda"
 output:
   BiocStyle::html_document:
     toc: true
+    toc_float: true
     theme: united
     number_sections: false
 bibliography: mylib.bib
@@ -38,32 +39,18 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-The sharing of biological data—such as genomes, epigenomes, and transcriptomes—plays a crucial role in promoting research transparency, enabling data reuse, and facilitating large-scale data reanalysis.
-Representative public repositories, including the Gene Expression Omnibus (GEO) [@10.1093/nar/gkad965], the Sequence Read Archive (SRA) [@10.1093/nar/gkab1053], and ArrayExpress [@10.1093/nar/gkaa1062], have greatly contributed to this effort.
-While the value of such open data continues to increase, integrating datasets across studies remains challenging due to technical and biological variability. Differences in experimenters, reagents, instruments, species, developmental stages, and tissues can all influence the reproducibility of microarray and RNA sequencing (RNA-Seq) experiments [@FISCHER20221208].
+Sharing biological data such as genomic, epigenomic, and transcriptomic data is a crucial initiative that enhances research transparency, promotes data reuse, and facilitates large-scale data reanalysis. Representative public repositories include the Gene Expression Omnibus (GEO)  [@10.1093/nar/gkad965], the Sequence Read Archive (SRA) [@10.1093/nar/gkab1053], and ArrayExpress [@10.1093/nar/gkaa1062], have greatly contributed to this effort. As the value of such data continues to increase, careful consideration is required when handling individual research datasets. Each study inherently involves various technical factors (e.g., experimenters, reagents, and measurement instruments), as well as biological factors (e.g., species, developmental stage, and tissue). Both technical and biological variations have been well documented to influence the reproducibility of microarray and RNA sequencing (RNA-Seq) experiments [@FISCHER20221208].
 
-Meta-analysis has emerged as a powerful strategy to address these challenges.
-By statistically integrating results from multiple studies investigating similar hypotheses, it helps identify consistent and biologically meaningful expression patterns that might be overlooked in individual experiments [@10.1093/nar/gkr1265].
-Vote-counting–based meta-analyses, for example, have identified stress-responsive genes in Arabidopsis thaliana and Oryza sativa [@life12071079 ; @10.3389/fpls.2024.1343787], and similar methods have been applied to quantify p53-dependent gene regulation [@10.1093/nar/gkw523].
-Such approaches demonstrate how meta-analysis can uncover robust biological signatures from heterogeneous data sources.
+Meta-analysis has emerged as a promising strategy for addressing these challenges, enabling the identification of reliable gene expression changes and underlying biological processes. It is a statistical method for integrating the results of multiple studies on the same topic, and is widely applied in genome research [@10.1093/nar/gkr1265].
+For example, on the basis of the vote-counting method, earlier studies identified abiotic stress-responsive genes in *A. thaliana* and *Oryza sativa* [@life12071079 ; @10.3389/fpls.2024.1343787]. This method led to the development of a p53 Expression Score to capture p53-dependent gene expression [@10.1093/nar/gkw523].
+Reanalysis of transcriptomic data across multiple studies is expected to identify significant differences that were not detected in individual studies. For example, see [@10.1371/journal.pcbi.1009317 ; @https://doi.org/10.1111/gtc.13166].
 
-In our previous study [@10.1093/plphys/kiaf105], we proposed the Stress Response score (SRscore), a new metric based on a modified vote-counting method [@biomedicines9050582 ; @life12071079].
-Unlike the previously reported HN-ratio and HN-score, SRscore considers all possible combinations between control and treatment groups when computing fold-change, allowing a more comprehensive evaluation of gene responsiveness [@10.1093/plphys/kiaf105].
+ In our previous study [@10.1093/plphys/kiaf105], we introduced the Stress Response score (SRscore) as a new metric using a modified vote-counting method based on methods reported in earlier studies [@biomedicines9050582 ; @life12071079]. When calculating fold-changes (FCs), whereas the HN-score [@biomedicines9050582 ; @life12071079] restricts the predefined combinations of experimental and control groups, the SRscore considers all possible combinations.
 
-To make this analytical framework broadly accessible, we developed the SRscore R package, which provides a simple and intuitive workflow for transcriptome meta-analysis across multiple research projects.
-The package was designed to address two major issues:
-(1) existing vote-counting–based tools are not easily integrated into downstream analyses, and
-(2) the manual nature of meta-analysis often limits research efficiency and reproducibility.
-
-The SRscore package automates key steps—generating control–treatment pairs, calculating fold-changes, and summarizing expression trends—through a unified pipeline.
-Its main output, SRscore, provides an intuitive measure of how consistently a gene is up- or downregulated across studies.
-Furthermore, it can be seamlessly combined with other R/Bioconductor tools for downstream functional and enrichment analyses, facilitating deeper biological interpretation.
-
-Although originally developed for transcriptome data, the underlying framework can also be applied to other omics datasets such as metabolomics.
-This vignette provides a practical guide to using the SRscore package, illustrating how to calculate SRscores, perform meta-analysis, and visualize the results effectively.
+We developed the R package *SRscore* to facilitate a simple and intuitive transcriptome meta-analysis across multiple research projects. The *SRscore* package was designed to address two key issues: (1) although some existing tools employ the vote-counting method, they are not structured for seamless integration into downstream analyses, and (2) the substantial effort and time required for meta-analyses often limits research efficiency. The *SRscore* package offers a standardized meta-analysis pipeline that can be readily utilized by researchers without specialized expertise in bioinformatics. Its applicability extends beyond stress response analysis, encompassing a broad spectrum of two-group comparisons, including organ-specific and drug-induced responses. The primary output, the SRscore, serves as an integrative metric that quantifies the number of studies supporting a particular finding, thereby providing an intuitively interpretable measure of reproducibility and consensus.
 
 # Installation
-```{r}
+```{r install}
 # library(devtools)
 # install_github("fusk-kpu/SRscore", build_vignettes = TRUE)
 library(SRscore)
@@ -80,33 +67,23 @@ library(SRscore)
 
 - `find_diffexp()`	Retrieves expression ratios for the specified gene across experiments.
 
-<a name="sd"/>
+# Demonstration datasets
 
-# Sample Data
-
-To calculate SRscore, both metadata and a gene expression matrix are required.
-The SRscore package includes sample datasets that can be loaded via `data()` and are used in the Example Workflow
-.
+The *SRscore* package includes three demonstration datasets derived from microarray studies available in the GEO database (https://www.ncbi.nlm.nih.gov/geo/) and our previous study [@10.1093/plphys/kiaf105]. Of these, two datasets include six GEO series examining A. thaliana under abscisic acid (ABA) treatment conditions, corresponding to the accession numbers GSE6638, GSE7112, GSE19520, GSE28800, GSE39384, and GSE135489. The demo datasets are a practical resource for users to gain a basic understanding of the SRscore analysis workflow. The following datasets are available in the *SRscore* package.
 
 ## MetadataABA
 
-Metadata describe the experimental dataset, including sample IDs and conditions.
-`MetadataABA` provides metadata for Arabidopsis thaliana under ABA stress.
-These data define pairs of control and treatment samples within each study.
+The SRscore package includes metadata, provided as object `MetadataABA`. These datasets contain information corresponding to the microarray studies described above. The following detailes were extracted from GEO records associated with the listed GEO accession numbers.
 
-Columns:
+- Study ID (e.g., GSE; a unique identifier for each study)
+- Sample ID (e.g., GSM; a unique identifier for each sample)
+- Tissue
+- Processing conditions
 
-- **Series**: Experimental dataset ID
+The primary role of the metadata in the *SRscore* package is to define the sample combinations to be compared within each study. Consequently, the minimum required information comprises only the study ID and sample ID.
 
-- **control_sample**: Control sample ID
 
-- **treated_sample**: Treatment sample ID
-
-- treatment: Treatment condition (optional)
-
-- tissue: Tissue name (optional)
-
-```{r}
+```{r metadata}
 library(tibble)
 data("MetadataABA")
 tibble(MetadataABA)
@@ -114,31 +91,27 @@ tibble(MetadataABA)
 
 ## TranscriptomeABA
 
-`TranscriptomeABA` is a gene expression matrix for Arabidopsis thaliana under ABA stress conditions.
-The first column is the gene ID, and the remaining columns represent sample IDs.
-The data were processed from raw CEL files and normalized using Robust Multi-array Average (RMA) [@Irizarry2003-uj].
-To reduce file size, only 1,000 genes are included.
+The package includes a gene expression dataset called `TranscriptomeABA`, which stores sample × gene expression profiles. All microarray data were downloaded from GEO as raw CEL files and preprocessed using the Robust Multi-array Average (RMA) [@Irizarry2003-uj], as implemented in the Bioconductor package *affy* [@10.1093/bioinformatics/btg405].
+	Users can also perform the analysis workflow with their own data by replacing the contents of the demo datasets, provided that the data conform to the same format. This flexibility allows the workflow to be extended to other platforms, such as RNA-Seq, to different omics fields, such as metabolomics, and to experimental conditions beyond stress responses, including drug treatments.
 
-```{r}
+```{r transcriptome}
 data("TranscriptomeABA")
 tibble(TranscriptomeABA)
 ```
 
 ## SRGA (Stress Responsive Gene Atlas)
 
-`SRGA` is a data frame integrating SR scores across 11 distinct stress conditions [@10.1093/plphys/kiaf105]. Since the SR score scale varies by stress type, it was standardized using z-scores. To reduce file size, only 1,000 genes are included. By utilizing [template matching](#tm) [@Pavlidis2001-ie], genes exhibiting similar SRscore patterns under each stress condition can be extracted.
+These data were generated by integrating SRscores calculated separately from the experimental datasets under 11 different stress conditions [@10.1093/plphys/kiaf105]. Given that the SRscore scale differes among different conditions, the values were standardized using z-scores. In subsequent Template Matching [@Pavlidis2001-ie], we searched for genes with similar SRscore patterns under different stress conditions based on `SRGA`.
 
-```{r}
+```{r srga}
 data("SRGA")
 tibble(SRGA)
 ```
 
-<a name="ew"/>
-
 # Example Workflow
-## 1. Generate Comparison Pairs
+## 1. Comparison Pairs
 
-Use `expand_by_group()` to generate all control–treatment combinations within each dataset (Series).
+The `expand_by_group()` function generates all possible combinations between the two groups (control and stress-treated groups) in each research project.
 
 ```{r comparison}
 grp <- "Series"
@@ -158,10 +131,9 @@ unique_series
 lapply(unique_series, function(x) subset(ebg, Series == x))
 ```
 
-## 2. Calculate SRratio
+## 2. Calculation of the SRratio
 
-`calcSRratio()` computes gene expression ratios (treated/control) for each combination.
-If data are already log-transformed, `set is.log = TRUE`; otherwise, it will apply a log transformation.
+The `calcSRratio()` function calculates the SRratio, which is the average gene expression ratio calculated based on combinations. If the argument `is.log2` is set to FALSE, the logarithmic conversion is performed using 2 as the base.
 
 ```{r SRratio}
 SRratio <- calcSRratio(
@@ -169,7 +141,7 @@ SRratio <- calcSRratio(
   var1 = var1,
   var2 = var2,
   pair = ebg,
-  is.log = TRUE
+  is.log2 = TRUE
 )
 
 tibble(SRratio)
@@ -183,7 +155,7 @@ conventional_SRratio <- calcSRratio(
   var1 = var1,
   var2 = var2,
   pair = MetadataABA,
-  is.log = TRUE
+  is.log2 = TRUE
 )
 
 tibble(conventional_SRratio)
@@ -191,8 +163,7 @@ tibble(conventional_SRratio)
 
 ## 3. Calculate SRscore
 
-`calcSRscore()` summarizes how often each gene is up- or down-regulated across studies.
-By default, SRratio ≥ 2 is considered up-regulated and SRratio ≤ -2 is down-regulated.
+The SRscore summarizes gene expression variations across the entire dataset by classifying the SRratio according to a pre-specified threshold. However, although this threshold can be freely specified, by default, log2FC values above 1 (corresponding to a 2-fold change on the linear scale) are classified as an increase in expression, whereas values below −1 (corresponding to a 1/2-fold change on the linear scale) correspond to a decline in expression, and values between −1 and 1 signify no change. The SRscore is calculated by subtracting the total number of expression decrease determinations from the total number of expression increase determinations.
 
 ```{r SRscore}
 SRscore <- calcSRscore(SRratio, threshold = c(-2, 2))
@@ -211,20 +182,19 @@ res <- directly_calcSRscore(
   var1 = var1,
   var2 = var2,
   .data2 = TranscriptomeABA,
-  is.log = TRUE
+  is.log2 = TRUE,
+  threshold = c(-2, 2)
 )
 
 names(res)
 tibble(res$SRscore)
 ```
 
-# Visualization
+## Metadata viewer
 
-## Expression Pattern of a Specified Gene
+The `find_diffexp()` function extracts the pre-calculated SRratio and corresponding metadata (research ID, group information, sample ID, etc.) for the specified gene. This enables users to intuitively understand how the expression of a specific gene changes in studies and samples.
 
-`find_diffexp()` extracts SRratio and metadata for specified genes to visualize expression patterns.
-
-```{r}
+```{r find_diffexp1}
 set.seed(1)
 res <- find_diffexp(
   sample(SRratio$ensembl_gene_id, 1),
@@ -239,7 +209,7 @@ tibble(res$SRscore)
 
 Multiple genes can also be specified:
 
-```{r}
+```{r find_diffexp2}
 set.seed(1)
 res2 <- find_diffexp(
   sample(SRratio$ensembl_gene_id, 10),
@@ -252,9 +222,35 @@ tibble(res2$result)
 tibble(res2$SRscore)
 ```
 
-A heatmap visualization using the *ComplexHeatmap* package [@Gu2016-ez] can help summarize patterns.
+# Downstream analysis
 
-```{r}
+The SRscore package can be applied to various downstream analyses (e.g., enrichment analysis, heatmap, and template matching).
+
+## Enrichment Analysis
+
+With respect to downstream analysis, it is important to identify the biological functions and pathways associated with the listed genes extracted based on SRscore values. This can be performed based on enrichment analysis using the *clusterProfiler* package [@Yu2012-si]. In the present study, genes assigned an SRscore of 1 or higher were designated as up-regulated genes, for which Gene Ontology (GO) enrichment analysis was performed using the *clusterProfiler* package. This accordingly revealed that the GO term “response to abscisic acid,” associated with the ABA stress response, was the most significantly enriched.
+
+```{r ea}
+library(clusterProfiler)
+library(ggplot2)
+
+ego <- enrichGO(
+  gene = SRscore$ensembl_gene_id[SRscore$score >= 1],
+  OrgDb = "org.At.tair.db",
+  keyType = "TAIR",
+  ont = "BP",
+  maxGSSize = 2000
+)
+
+dotplot(ego, showCategory = 5, font.size = 14) +
+  theme(text = element_text(size = 14))
+```
+
+## Heatmap
+
+Using the `find_diffexp()` function to extract the SRratio for a specified group of genes linked to metadata, and applying the *ComplexHeatmap* package [@Gu2016-ez], provides visual confirmation of the extracted information 
+
+```{r heatmap}
 library(ComplexHeatmap)
 library(RColorBrewer)
 
@@ -282,35 +278,11 @@ ComplexHeatmap::pheatmap(
 )
 ```
 
-## Enrichment Analysis
-
-Genes with consistently altered expression (higher |SRscore|) can be analyzed for functional enrichment.
-Example: GO enrichment for genes with SRscore ≥ 1 using *clusterProfiler* [@Yu2012-si].
-
-```{r}
-library(clusterProfiler)
-library(ggplot2)
-
-ego <- enrichGO(
-  gene = SRscore$ensembl_gene_id[SRscore$score >= 1],
-  OrgDb = "org.At.tair.db",
-  keyType = "TAIR",
-  ont = "BP",
-  maxGSSize = 2000
-)
-
-dotplot(ego, showCategory = 5, font.size = 14) +
-  theme(text = element_text(size = 14))
-```
-
-<a name="tm"/>
-
 ## Template Matching
 
-Template matching [@Pavlidis2001-ie] identifies genes with similar SRscore patterns.
-Here, the five most similar genes to *Gols3* (AT1G09350) are found using the Euclidean distance.
+By applying Template Matching method [@Pavlidis2001-ie], other genes with similar patterns can be identified based on the specific SRscore pattern (template) of a given gene. Using *galactinol synthase 3* (*GolS3*), one of the cold stress response genes, as an example, Figure 4 shows the results obtained when extracting the top five genes with the most similar SRscore patterns from the 1,000 genes contained within the sample data `SRGA`.
 
-```{r}
+```{r tm}
 library(genefilter)
 library(DT)
 
@@ -339,19 +311,13 @@ datatable(
 )
 ```
 
-# Summary of Outputs
+# Summary
 
-## Output	Description
-Comparison pairs	Lists all control–treatment sample pairs within each study.
-SRratio	Gene-wise expression ratios for each comparison.
-SRscore	Summarizes overall up/down-regulation frequency per gene.
-
-Together, these outputs form a reproducible and scalable framework for identifying stress-responsive genes across diverse datasets.
-By automating complex steps and standardizing analysis, the SRscore package helps researchers efficiently derive meaningful biological insights.
+This study demonstrates the utility and applicability of the *SRscore* package (https://github.com/fusk-kpu/SRscore) by applying it to real datasets. This presents a rational and reproducible workflow for generating control–treatment comparisons, calculating gene expression ratios, and scoring expression patterns across multiple transcriptome datasets. The package streamlines transcriptome meta-analysis, enhances reproducibility, and enables researchers to focus on interpreting the biological significance of the results rather than expending effort on data organization and manual calculations. Furthermore, the core functions of the SRscore package are not restricted to transcriptomic data but can also be applied to other omics data, such as metabolomics, thereby making it a versatile tool for future applications.
 
 # Session info
 
-```{r}
+```{r session info}
 sessionInfo()
 ```
 
@@ -359,7 +325,7 @@ sessionInfo()
 
 <br>
 
-The following figure illustrates the process of deriving the SRscore.
-![The process of deriving SRscore](Derivation_process_of_SRscore.png)
+![](Figure1.png)
 
-Figure 1. **Detailed calculation of SRscores.** We identified stress-responsive genes using the Stress Responsive (SR) score, which is shown here. Essentially, it is based on the fold change (FC) in gene expression between the two groups, a modification of the approach reported in Tamura and Bono (2022). The difference from the HN-ratio and HN-score in Tamura and Bono (2022) is whether or not FC calculations are performed on all pairs of combinations of the treatment and control groups. In Step (1), FC is calculated for all pairs of combinations of the treatment and control groups within a project/dataset and their mean value is obtained, which is called SRratio. This procedure is intended to reduce batch effects, which means systematic nonbiological variations that arise from differences in the experimental conditions across different batches of samples. Please note that we used log2FC for both platforms. In Step (2), the FC value is considered to be upregulation (“U”)/downregulation (“D”) at a certain threshold; here, |SRratio| ≥2 and those with no change in magnification near zero are considered to be not changed (a high SRscore can be interpreted as a tendency toward consistent upregulation in many research projects, whereas a low SRscore indicates a tendency toward consistent downregulation). N). In Step (3), the total number of “U” or “D” labels calculated in this manner is subtracted to obtain the SRscore. Roughly, it is a modification of the vote-counting system. Finally, we obtained Z-scored SRscores for further analysis and construction of the AtSRGA.
+Figure 1. **Overview of the SRscore package** <br>
+The *SRscore* package is an R package that enables the estimation of variations in gene expression across multiple datasets through meta-analysis. The SRscore calculation process is illustrated in three key steps within the workflow, each highlighted in corresponding colored boxes. (a) Metadata and gene expression data are loaded. (b) Sample combinations are determined to compare expression levels. (c) SRratio is calculated. The procedure is similar to that for fold change (FC); however, in this study, FC is calculated for all possible pairs and averaged. Batch effects are considered, and calculations are performed separately for each dataset (e.g., the GEO series). (d) SRscore is calculated. Based on the SRratio calculated for each dataset, gene expression changes are classified as follows (SRratio ≥ 1: expression increase, −1 < SRratio < 1: no change, SRratio ≤ −1: expression decrease). The number of expression decreases is subtracted from the number of expression increases to obtain the SRscore, and gene expression variation is evaluated based on its magnitude. (e) The SRratio, SRscore, etc., of genes (or groups of genes) of interest are checked while linking them to metadata.

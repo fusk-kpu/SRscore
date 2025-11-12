@@ -8,14 +8,13 @@
 #' @param var2 Column name of second variable.
 #' @param grp Column name of groups.
 #' @param .data2 A data frame containing expression values for a series of arrays, with rows corresponding to genes and columns to samples.
-#' @param is.log A logical specifying if .data2 is log-transformed.
-#'
+#' @param is.log2 A logical specifying if .data2 is log-2transformed.
+#' @param threshold A vector of length 2 (x, y) indicating threshold values. `c(-1, 1)` is default.
+#' 
 #' @importFrom dplyr group_by filter_all all_vars %>%
 #' @importFrom tidyr expand
 #' @importFrom rlang sym
 #' @importFrom utils menu
-#' @importFrom Biobase exprs
-#' @importFrom SummarizedExperiment assay
 #'
 #' @return A data frame containing results.
 #'
@@ -33,11 +32,12 @@
 #'                            var1,
 #'                            var2,
 #'                            TranscriptomeABA,
-#'                            is.log = TRUE)
+#'                            is.log2 = TRUE,
+#'                            threshold = c(-1, 1))
 #' lapply(ls, head)
 #'
 #' @export
-directly_calcSRscore <- function(.data1, grp, var1, var2, .data2, is.log = NA) {
+directly_calcSRscore <- function(.data1, grp, var1, var2, .data2, is.log2 = NA, threshold = c(-1, 1)) {
 
   # Creating a data frame including all possible pairs of two variables within each groups.
   . <- NULL
@@ -54,15 +54,15 @@ directly_calcSRscore <- function(.data1, grp, var1, var2, .data2, is.log = NA) {
   ratio <- function(i){
     var2_side <- pairs[i, var2]
     var1_side <- pairs[i, var1]
-    if (is.na(is.log)) {
+    if (is.na(is.log2)) {
       switch (
-        menu(c("yes", "no"), title = "Is the data log-transformed?"),
+        menu(c("yes", "no"), title = "Is the data log2-transformed?"),
         {.data2[, var2_side] - .data2[, var1_side]},
         {log2((.data2[, var2_side] + 1) / (.data2[, var1_side] + 1))}
       )
-    } else if (is.log == TRUE) {
+    } else if (is.log2 == TRUE) {
       .data2[, var2_side] - .data2[, var1_side]
-    } else if (is.log == FALSE) {
+    } else if (is.log2 == FALSE) {
       log2((.data2[, var2_side] + 1) / (.data2[, var1_side] + 1))
     }
   }
@@ -86,27 +86,19 @@ directly_calcSRscore <- function(.data1, grp, var1, var2, .data2, is.log = NA) {
 
   SRratio_keep <- Filter(is.numeric, SRratio_mean)
 
-  thre <- SRratio_keep >= 1
-  up1 <- rowSums(thre)
-
-  thre <- SRratio_keep >= 2
-  up2 <- rowSums(thre)
-
-  thre <- SRratio_keep <= -1
-  dn1 <- rowSums(thre)
-
-  thre <- SRratio_keep <= -2
-  dn2 <- rowSums(thre)
+  thre <- SRratio_keep <= threshold[1]
+  dn <- rowSums(thre)
+  
+  thre <- SRratio_keep >= threshold[2]
+  up <- rowSums(thre)
 
   all <- ncol(SRratio_keep)
 
-  unchange1 <- all - up1 - dn1
-  unchange2 <- all - up2 - dn2
+  unchange <- all - up - dn
 
-  SR1 <- up1 - dn1
-  SR2 <- up2 - dn2
+  score <- up - dn
 
-  SRscore <- cbind(up1, up2, dn1, dn2, unchange1, unchange2, all, SR1, SR2)
+  SRscore <- cbind(up, dn, unchange, all, score)
   SRscore <- as.data.frame(SRscore)
   SRscore <- cbind(Filter(is.character, SRratio_mean), SRscore)
   list(pairs = pairs,

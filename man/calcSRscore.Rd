@@ -4,12 +4,12 @@
 \alias{calcSRscore}
 \title{Create a Data Frame of SRscore}
 \usage{
-calcSRscore(srratio, threshold = c(-2, 2))
+calcSRscore(srratio, threshold = c(-1, 1))
 }
 \arguments{
 \item{srratio}{A data frame of SRratio.}
 
-\item{threshold}{A vector of length 2 (x, y) indicating threshold values. \code{c(-2, 2)} is default.}
+\item{threshold}{A vector of length 2 (x, y) indicating threshold values. \code{c(-1, 1)} is default.}
 }
 \value{
 A data frame containing results.
@@ -32,8 +32,8 @@ SRratio <- calcSRratio(TranscriptomeABA,
                        var1,
                        var2,
                        ebg,
-                       is.log = 1)
+                       is.log2 = TRUE)
 
-head(calcSRscore(SRratio))
+head(calcSRscore(SRratio, threshold = c(-1, 1)))
 
 }

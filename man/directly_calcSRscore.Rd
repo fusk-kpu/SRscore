@@ -4,7 +4,15 @@
 \alias{directly_calcSRscore}
 \title{Aggregate the results of the three functions into a single list}
 \usage{
-directly_calcSRscore(.data1, grp, var1, var2, .data2, is.log = NA)
+directly_calcSRscore(
+  .data1,
+  grp,
+  var1,
+  var2,
+  .data2,
+  is.log2 = NA,
+  threshold = c(-1, 1)
+)
 }
 \arguments{
 \item{.data1}{A data frame containing the two variables you want to compare, as well as the variables of the group to which they belong.}
@@ -17,7 +25,9 @@ directly_calcSRscore(.data1, grp, var1, var2, .data2, is.log = NA)
 
 \item{.data2}{A data frame containing expression values for a series of arrays, with rows corresponding to genes and columns to samples.}
 
-\item{is.log}{A logical specifying if .data2 is log-transformed.}
+\item{is.log2}{A logical specifying if .data2 is log-2transformed.}
+
+\item{threshold}{A vector of length 2 (x, y) indicating threshold values. \code{c(-1, 1)} is default.}
 }
 \value{
 A data frame containing results.
@@ -36,7 +46,8 @@ ls <- directly_calcSRscore(MetadataABA,
                            var1,
                            var2,
                            TranscriptomeABA,
-                           is.log = TRUE)
+                           is.log2 = TRUE,
+                           threshold = c(-1, 1))
 lapply(ls, head)
 
 }
