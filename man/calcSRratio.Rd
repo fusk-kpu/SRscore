@@ -15,7 +15,7 @@ calcSRratio(.data, var1, var2, pair, is.log2 = NA)
 
 \item{pair}{A data frame with control samples and treatment samples.}
 
-\item{is.log2}{A logical value (TRUE, FALSE) or NA indicating whether the data in .data is log-transformed:
+\item{is.log2}{A logical value (TRUE, FALSE) or NA indicating whether the data in .data is log2-transformed:
 \itemize{
 \item If TRUE, the SR ratio is calculated as the difference between the target and reference variables.
 \item If FALSE, the SR ratio is calculated as the log2-transformed ratio: log2((target + 1) / (reference + 1)).
@@ -31,7 +31,7 @@ A data frame containing:
 }
 \description{
 This function computes the Stress Response ratio (SR ratio) for paired variables in a dataset.
-The function supports both log-transformed and non-log-transformed data and calculates the mean SRratio for grouped variables.
+The function supports both log2-transformed and non-log2-transformed data and calculates the mean SRratio for grouped variables.
 }
 \examples{
 var1 <- "control_sample"

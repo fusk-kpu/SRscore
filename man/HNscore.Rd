@@ -10,7 +10,7 @@ A data frame with 1000 rows and 11 variables:
 \item{Transcript_id_At}{Transcript ID in \emph{Arabidopsis thaliana}}
 \item{Upregulated}{Total number of times HNratio exceeds 2}
 \item{Downregulated}{Total number of times HNratio is below 0.5}
-\item{Unchanged}{Total number of times SRratio is betweem 0.5 and 2}
+\item{Unchanged}{Total number of times SRratio is between 0.5 and 2}
 \item{All}{Maximum possible HNscore}
 \item{HN.score}{HNscore}
 \item{Gene_name_At}{Gene name in \emph{Arabidopsis thaliana}}
