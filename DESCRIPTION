@@ -1,6 +1,6 @@
 Package: SRscore
 Type: Package
-Title: SRscore: Simple Transcriptome Meta-analysis for Identifying Stress-Responsive Genes
+Title: SRscore: Simple Transcriptome Meta-Analysis for Identifying Stress-Responsive Genes
 Version: 0.1.1
 Author: Yusuke Fukuda [aut, cre], Atsushi Fukushima [aut]
 Authors@R: c(person(given = "Yusuke",
