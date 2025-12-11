@@ -6,8 +6,6 @@
 #' @param srscore A dataframe of srratio
 #' @param metadata A dataframe of metadata
 #'
-#' @seealso [calcSRratio()]
-#'
 #' @return
 #' Data frame of metadata with SRratio corresponding to the specified gene ID in the back row
 #'
@@ -34,10 +32,8 @@
 #'
 #' @export
 find_diffexp <- function(genes, srratio, srscore, metadata) {
-
-  cl <- !sapply(srratio, function(x) {
-    any(x > 0, na.rm = TRUE) && any(x < 0, na.rm = TRUE)
-    })
+  
+  cl <- sapply(srratio, is.character)
   flt <- srratio[apply(srratio[cl], 1, function(g) g %in% genes), ]
   flt <- flt[, sapply(flt, is.numeric)]
   rownames(flt) <- sort(genes)

@@ -43,6 +43,3 @@ set.seed(1)
 find_diffexp(sample(SRratio$ensembl_gene_id, 1), SRratio, SRscore, MetadataABA)
 
 }
-\seealso{
-\code{\link[=calcSRratio]{calcSRratio()}}
-}

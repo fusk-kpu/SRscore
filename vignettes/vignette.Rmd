@@ -171,6 +171,29 @@ head(SRscore)
 tibble(SRscore)
 ```
 
+## Simple Plotting
+Here, we introduce fundamental visualisation functions to aid in the intuitive understanding of the SRscore, the primary output of the SRscore package. Utilising these functions allows for the straightforward assessment of the distribution of SRscores and the identification of gene groups exhibiting distinctive SRscores.
+
+### SRscore distribution
+`plot_SRscore_distr` aggregates the number of genes for each SRscore value (excluding zero) and visualises this distribution as a bar chart. Setting the `log` argument to `TRUE` (default is `FALSE`) converts the y-axis to a logarithmic scale, making distributions across a wide range of values easier to interpret.
+```{r}
+plot_SRscore_distr(SRscore)
+plot_SRscore_distr(SRscore, log = TRUE)
+```
+
+### Ranked SRscore
+`plot_SRscore_rank` sorts genes in descending order of SRscore and visualises their distribution. The top or bottom range can be highlighted with colour coding using the `threshold` argument (default is `c(-1, 1)`).
+```{r}
+plot_SRscore_rank(SRscore)
+```
+
+### Top SRscore
+`plot_SRscore_top` extracts genes with the highest absolute SRscore values and visualises them as a bar chart. The number of top genes to visualise can be flexibly specified using the argument `top_n` (default is `20`).
+```{r}
+plot_SRscore_top(SRscore)
+plot_SRscore_top(SRscore, top_n = 30)
+```
+
 ## All-in-One Execution
 
 `directly_calcSRscore()` performs all the steps above and returns the results as a list.
