@@ -57,7 +57,7 @@ library(SRscore)
 ```
 
 # Functions Overview
-- `expand_by_group()`	Creates a data frame containing all possible control–treatment sample combinations within each group.
+- `expand_by_group()`	Creates a data frame containing all possible control-treatment sample combinations within each group.
 
 - `calcSRratio()`	Calculates the gene expression ratio between control and treatment samples.
 
@@ -163,7 +163,7 @@ tibble(conventional_SRratio)
 
 ## 3. Calculate SRscore
 
-The SRscore summarizes gene expression variations across the entire dataset by classifying the SRratio according to a pre-specified threshold. However, although this threshold can be freely specified, by default, log2FC values above 1 (corresponding to a 2-fold change on the linear scale) are classified as an increase in expression, whereas values below −1 (corresponding to a 1/2-fold change on the linear scale) correspond to a decline in expression, and values between −1 and 1 signify no change. The SRscore is calculated by subtracting the total number of expression decrease determinations from the total number of expression increase determinations.
+The SRscore summarizes gene expression variations across the entire dataset by classifying the SRratio according to a pre-specified threshold. However, although this threshold can be freely specified, by default, log2FC values above 1 (corresponding to a 2-fold change on the linear scale) are classified as an increase in expression, whereas values below -1 (corresponding to a 1/2-fold change on the linear scale) correspond to a decline in expression, and values between -1 and 1 signify no change. The SRscore is calculated by subtracting the total number of expression decrease determinations from the total number of expression increase determinations.
 
 ```{r SRscore}
 SRscore <- calcSRscore(SRratio, threshold = c(-2, 2))
@@ -172,23 +172,23 @@ tibble(SRscore)
 ```
 
 ## Simple Plotting
-Here, we introduce fundamental visualisation functions to aid in the intuitive understanding of the SRscore, the primary output of the SRscore package. Utilising these functions allows for the straightforward assessment of the distribution of SRscores and the identification of gene groups exhibiting distinctive SRscores.
+Here, we introduce fundamental visualization functions to aid in the intuitive understanding of the SRscore, the primary output of the SRscore package. Utilizing these functions allows for the straightforward assessment of the distribution of SRscores and the identification of gene groups exhibiting distinctive SRscores.
 
 ### SRscore distribution
-`plot_SRscore_distr` aggregates the number of genes for each SRscore value (excluding zero) and visualises this distribution as a bar chart. Setting the `log` argument to `TRUE` (default is `FALSE`) converts the y-axis to a logarithmic scale, making distributions across a wide range of values easier to interpret.
+`plot_SRscore_distr()` aggregates the number of genes for each SRscore value (excluding zero) and visualizes this distribution as a bar chart. Setting the `log` argument to `TRUE` (default is `FALSE`) converts the y-axis to a logarithmic scale, making distributions across a wide range of values easier to interpret.
 ```{r}
 plot_SRscore_distr(SRscore)
 plot_SRscore_distr(SRscore, log = TRUE)
 ```
 
 ### Ranked SRscore
-`plot_SRscore_rank` sorts genes in descending order of SRscore and visualises their distribution. The top or bottom range can be highlighted with colour coding using the `threshold` argument (default is `c(-1, 1)`).
+`plot_SRscore_rank()` sorts genes in descending order of SRscore and visualizes their distribution. The top or bottom range can be highlighted with color coding using the `threshold` argument (default is `c(-1, 1)`).
 ```{r}
 plot_SRscore_rank(SRscore)
 ```
 
 ### Top SRscore
-`plot_SRscore_top` extracts genes with the highest absolute SRscore values and visualises them as a bar chart. The number of top genes to visualise can be flexibly specified using the argument `top_n` (default is `20`).
+`plot_SRscore_top()` extracts genes with the highest absolute SRscore values and visualizes them as a bar chart. The number of top genes to visualize can be flexibly specified using the argument `top_n` (default is `20`).
 ```{r}
 plot_SRscore_top(SRscore)
 plot_SRscore_top(SRscore, top_n = 30)
@@ -196,7 +196,7 @@ plot_SRscore_top(SRscore, top_n = 30)
 
 ## All-in-One Execution
 
-`directly_calcSRscore()` performs all the steps above and returns the results as a list.
+`directly_calcSRscore()` aggregates the results of `expand_by_group()`, `calcSRratio()`, and `calcSRscore()` into a list.
 
 ```{r All in one}
 res <- directly_calcSRscore(
@@ -251,7 +251,7 @@ The SRscore package can be applied to various downstream analyses (e.g., enrichm
 
 ## Enrichment Analysis
 
-With respect to downstream analysis, it is important to identify the biological functions and pathways associated with the listed genes extracted based on SRscore values. This can be performed based on enrichment analysis using the *clusterProfiler* package [@Yu2012-si]. In the present study, genes assigned an SRscore of 1 or higher were designated as up-regulated genes, for which Gene Ontology (GO) enrichment analysis was performed using the *clusterProfiler* package. This accordingly revealed that the GO term “response to abscisic acid,” associated with the ABA stress response, was the most significantly enriched.
+With respect to downstream analysis, it is important to identify the biological functions and pathways associated with the listed genes extracted based on SRscore values. This can be performed based on enrichment analysis using the *clusterProfiler* package [@Yu2012-si]. In the present study, genes assigned an SRscore of 1 or higher were designated as up-regulated genes, for which Gene Ontology (GO) enrichment analysis was performed using the *clusterProfiler* package. This accordingly revealed that the GO term "response to abscisic acid," associated with the ABA stress response, was the most significantly enriched.
 
 ```{r ea}
 library(clusterProfiler)
@@ -336,7 +336,7 @@ datatable(
 
 # Summary
 
-This study demonstrates the utility and applicability of the *SRscore* package (https://github.com/fusk-kpu/SRscore) by applying it to real datasets. This presents a rational and reproducible workflow for generating control–treatment comparisons, calculating gene expression ratios, and scoring expression patterns across multiple transcriptome datasets. The package streamlines transcriptome meta-analysis, enhances reproducibility, and enables researchers to focus on interpreting the biological significance of the results rather than expending effort on data organization and manual calculations. Furthermore, the core functions of the SRscore package are not restricted to transcriptomic data but can also be applied to other omics data, such as metabolomics, thereby making it a versatile tool for future applications.
+This study demonstrates the utility and applicability of the *SRscore* package (https://github.com/fusk-kpu/SRscore) by applying it to real datasets. This presents a rational and reproducible workflow for generating control-treatment comparisons, calculating gene expression ratios, and scoring expression patterns across multiple transcriptome datasets. The package streamlines transcriptome meta-analysis, enhances reproducibility, and enables researchers to focus on interpreting the biological significance of the results rather than expending effort on data organization and manual calculations. Furthermore, the core functions of the SRscore package are not restricted to transcriptomic data but can also be applied to other omics data, such as metabolomics, thereby making it a versatile tool for future applications.
 
 # Session info
 
