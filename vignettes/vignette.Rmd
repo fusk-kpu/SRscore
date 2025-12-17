@@ -253,7 +253,7 @@ The SRscore package can be applied to various downstream analyses (e.g., enrichm
 
 With respect to downstream analysis, it is important to identify the biological functions and pathways associated with the listed genes extracted based on SRscore values. This can be performed based on enrichment analysis using the *clusterProfiler* package [@Yu2012-si]. In the present study, genes assigned an SRscore of 1 or higher were designated as up-regulated genes, for which Gene Ontology (GO) enrichment analysis was performed using the *clusterProfiler* package. This accordingly revealed that the GO term "response to abscisic acid," associated with the ABA stress response, was the most significantly enriched.
 
-```{r ea}
+```{r ea, eval=FALSE}
 library(clusterProfiler)
 library(ggplot2)
 
