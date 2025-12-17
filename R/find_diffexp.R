@@ -33,14 +33,18 @@
 #' @export
 find_diffexp <- function(genes, srratio, srscore, metadata) {
   
-  cl <- sapply(srratio, is.character)
-  flt <- srratio[apply(srratio[cl], 1, function(g) g %in% genes), ]
-  flt <- flt[, sapply(flt, is.numeric)]
-  rownames(flt) <- sort(genes)
-  flt <- t(flt)
+  cl_chr <- sapply(srratio, is.character)
+  subset_srratio <- srratio[apply(srratio[cl_chr], 1, function(g) g %in% genes), ]
+  cl_nm <- sapply(subset_srratio, is.numeric)
+  subset_srratio_nm <- subset_srratio[, cl_nm]
+  rownames(subset_srratio_nm) <- sort(genes)
+  subset_srratio_nm <- t(subset_srratio_nm)
   class(metadata) <- "data.frame"
-  rownames(flt) <- metadata[, (apply(metadata, 2, function(col) all(col %in% colnames(srratio))))]
-  list(result = cbind(metadata, flt),
-       SRscore = srscore[which(unlist(Filter(is.character, srratio)) %in% genes), ])
+  
+  if(!all(c("treated_sample") %in% colnames(metadata))) {
+    stop("metadata must contain columns 'treated_sample'")
+  }
+  
+  list(result = cbind(subset_srratio_nm, metadata[match(rownames(subset_srratio_nm), metadata$treated_sample), ]),
+       SRscore = srscore[which(unlist(srratio[cl_chr]) %in% genes), ])
 }
-

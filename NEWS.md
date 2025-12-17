@@ -1,3 +1,8 @@
 # SRscore 0.1.1
 
-* Initial CRAN submission.
+## New features
+
+* `plot_SRscore_distr()` added.
+* `plot_SRscore_rank()` added.
+* `plot_SRscore_top()` added.
+
