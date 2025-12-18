@@ -4,7 +4,7 @@ An R package for simple transcriptome meta-analysis for identifying stress-respo
 
 Stress Response score (SRscore) is a stress responsiveness measure for transcriptome datasets and is based on the vote-counting method.
 The SRscore is determined to evaluate and scores genes on the basis of the consistency of the direction of their regulation (Up-regulation, Down-regulation, or No changed) under stress conditions across the analyzed, multiple research projects. 
-This package is based on the HN-score of [Tamura and Bono (2022)] <doi:10.3390/life12071079>, and can calculate both the original method and the calculation method we have extended ([Fukuda et al. 2025](https://doi.org/10.1093/plphys/kiaf105)).
+This package is based on the HN-score of [Tamura and Bono (2022)](https://doi.org/10.3390/life12071079), and can calculate both the original method and the calculation method we have extended ([Fukuda et al. 2025](https://doi.org/10.1093/plphys/kiaf105)).
 
 Installation
 ------------
