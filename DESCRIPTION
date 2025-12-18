@@ -17,9 +17,9 @@ Description: Stress Response score (SRscore) is a stress responsiveness
     basis of the consistency of the direction of their regulation 
     (Up-regulation, Down-regulation, or No changed) under stress conditions 
     across the analyzed, multiple research projects. This package is based on 
-    the HN-score of Tamura and Bono (2022) <https://doi.org/10.3390/life12071079>, and can calculate both 
+    the HN-score of Tamura and Bono (2022) <doi:10.3390/life12071079>, and can calculate both 
     the original method and the calculation method we have extended 
-    (Fukuda et al. 2025) <https://doi.org/10.1093/plphys/kiaf105>.
+    (Fukuda et al. 2025) <doi:10.1093/plphys/kiaf105>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
