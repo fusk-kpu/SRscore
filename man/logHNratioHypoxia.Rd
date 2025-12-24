@@ -3,7 +3,7 @@
 \docType{data}
 \name{logHNratioHypoxia}
 \alias{logHNratioHypoxia}
-\title{Test data for calculating HNratio using sample data}
+\title{Reproducing HN-scores from HN-ratios Using the SRscore Package}
 \format{
 An object of class \code{data.frame} with 1000 rows and 30 columns.
 }
@@ -14,8 +14,11 @@ Tamura, Keita, and Hidemasa Bono. 2022. “Meta-Analysis of RNA Sequencing Data 
 logHNratioHypoxia
 }
 \description{
-HNscore was calculated to evaluate the changes in the gene expression under hypoxia across the experiments.
-A dataframe containing HNratio calculated from \code{TPMHypoxia}
+The HN-ratio, which quantifies gene expression changes between hypoxic and normoxic conditions across multiple experiments, was originally proposed by Tamura and Bono (2022) \url{doi:10.3390/life12071079}.
+It is publicly available on figshare \url{doi:10.6084/m9.figshare.20055086}.
+In the SRscore package, the HN-ratio is introduced solely as an intermediate quantity required to compute HN-scores.
+\code{logHNratioHypoxia} is a data frame containing log2-transformed HN-ratios.
+To reduce data size, \code{logHNratioHypoxia} includes HN-ratios for a subset of 1,000 genes extracted from the original dataset.
 }
 \details{
 Column components :

@@ -1,7 +1,8 @@
 #' Test data for calculating SRratio using sample data
 #'
 #'
-#' A dataframe containing SRratio calculated from `TranscriptomeABA`
+#' A dataframe containing SRratio (Stress Response ratio) calculated 
+#' from `TranscriptomeABA`.
 #'
 #'
 #'

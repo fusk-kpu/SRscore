@@ -1,9 +1,14 @@
-#' Test data for calculating HNratio using sample data
+#' Reproducing HN-scores from HN-ratios Using the SRscore Package
 #'
-#' HNscore was calculated to evaluate the changes in the gene expression under hypoxia across the experiments.
-#' A dataframe containing HNratio calculated from `TPMHypoxia`
-#'
-#'
+#' The HN-ratio, which quantifies gene expression changes between 
+#' hypoxic and normoxic conditions across multiple experiments, was originally 
+#' proposed by Tamura and Bono (2022) <doi:10.3390/life12071079>.
+#' It is publicly available on figshare <doi:10.6084/m9.figshare.20055086>. 
+#' In the SRscore package, the HN-ratio is introduced solely as 
+#' an intermediate quantity required to compute HN-scores.
+#' `logHNratioHypoxia` is a data frame containing log2-transformed HN-ratios. 
+#' To reduce data size, `logHNratioHypoxia` includes HN-ratios for a subset of
+#'  1,000 genes extracted from the original dataset.
 #'
 #' Column components :
 #'

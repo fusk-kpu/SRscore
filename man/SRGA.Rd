@@ -3,7 +3,7 @@
 \docType{data}
 \name{SRGA}
 \alias{SRGA}
-\title{Test data for template matching using sample data}
+\title{Test data for the SRscore package}
 \format{
 A data frame with 1000 rows and 13 variables:
 \describe{
@@ -26,9 +26,9 @@ A data frame with 1000 rows and 13 variables:
 SRGA
 }
 \description{
-SRGA is a data frame integrating SRscores across 11 distinct stress conditions(Fukuda et al., 2025).
-Since the SR score scale varies by stress type, it was standardized using z-scores.
-To reduce file size, only 1,000 genes are included.
-By utilizing template matching (Pavlidis and Noble 2001), genes exhibiting similar SRscore patterns under each stress condition can be extracted.
+SRGA is a reference test dataset that integrates standardized SRscores across 11 stress conditions as reported in Fukuda et al. (2025) \url{doi:10.1093/plphys/kiaf105}.
+Because SRscore scales differ by stress type, SRscores were standardized using z-scores.
+This dataset is provided solely for demonstrating and testing template matching (Pavlidis and Noble, 2001) \url{doi:10.1186/gb-2001-2-10-research0042} workflows implemented in the SRscore package and is not intended to introduce a new analysis method.
+To reduce file size, the dataset includes SRscores for a subset of 1,000 genes.
 }
 \keyword{datasets}

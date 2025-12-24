@@ -1,5 +1,11 @@
 #' Find the expression ratio for each experimental sample for the specified gene.
 #'
+#' This function retrieves SRratio (Stress Response ratio) values for one or 
+#' more specified genes across all experimental samples and combines them with
+#' the corresponding sample metadata. In addition, the corresponding 
+#' SRscore (Stress Response score) values for the specified genes are returned.
+#' The output is intended for downstream inspection and visualization of 
+#' gene-level expression patterns across experimental conditions.
 #'
 #' @param genes character vector that can consist of gene IDs
 #' @param srratio A dataframe of srratio

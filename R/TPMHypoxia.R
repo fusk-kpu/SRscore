@@ -1,8 +1,10 @@
 #' Hypoxia stress RNA-Seq data in *Arabidopsis thaliana*
 #'
-#' This is RNA-Seq data that is used in the study by Tamura and Bono.
-#' The quantitative RNA-Seq data, which were calculated as transcripts per million (TPM),
-#' are available at figshare (https://figshare.com/articles/dataset/Meta-analysis_of_RNA_Sequencing_Data_of_Arabidopsis_and_Rice_under_Hypoxia/20055086).
+#' This is RNA-Seq data that is used in the study by 
+#' Tamura and Bono (2022) <doi:10.3390/life12071079>.
+#' The quantitative RNA-Seq data, which were calculated 
+#' as transcripts per million (TPM), are available 
+#' at figshare <doi:10.6084/m9.figshare.20055086>.
 #'
 #' Column components :
 #'

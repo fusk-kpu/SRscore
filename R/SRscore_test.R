@@ -1,7 +1,8 @@
 #' Test data for calculating SRscore using sample data
 #'
 #'
-#' A dataframe containing SRscore calculated from `SRratio_test`
+#' A dataframe containing SRscore (Stress Response score) calculated
+#' from `SRratio_test`.
 #'
 #'
 #'

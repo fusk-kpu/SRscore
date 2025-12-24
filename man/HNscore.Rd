@@ -3,7 +3,7 @@
 \docType{data}
 \name{HNscore}
 \alias{HNscore}
-\title{Test data for calculating HNscore using sample data}
+\title{Reproducing HN-scores from HN-ratios Using the SRscore Package}
 \format{
 A data frame with 1000 rows and 11 variables:
 \describe{
@@ -12,7 +12,7 @@ A data frame with 1000 rows and 11 variables:
 \item{Downregulated}{Total number of times HNratio is below 0.5}
 \item{Unchanged}{Total number of times SRratio is between 0.5 and 2}
 \item{All}{Maximum possible HNscore}
-\item{HN.score}{HNscore}
+\item{HN.score}{HN-score}
 \item{Gene_name_At}{Gene name in \emph{Arabidopsis thaliana}}
 \item{Gene_description_At}{Gene description in \emph{Arabidopsis thaliana}}
 \item{Protein_id_Hs}{Transcript ID in \emph{Homo Sapiens}}
@@ -27,7 +27,9 @@ Tamura, Keita, and Hidemasa Bono. 2022. “Meta-Analysis of RNA Sequencing Data 
 HNscore
 }
 \description{
-HNscore was calculated to evaluate the changes in the gene expression under hypoxia across the experiments.
-A dataframe containing HNscore calculated from \code{logHNratioHypoxia}.
+The HN-score is a scoring metric derived from the HN-ratio, which represents the gene expression ratio between hypoxic and normoxic conditions, and was originally proposed by Tamura and Bono (2022) \url{doi:10.3390/life12071079}.
+It is publicly available on figshare \url{doi:10.6084/m9.figshare.20055086}.
+\code{HNscore} is provided as a data frame containing HN-scores calculated from \code{logHNratioHypoxia} and is implemented as test data in the SRscore package.
+To reduce data size, \code{HNscore} includes HN-scores for a subset of 1,000 genes extracted from the original dataset.
 }
 \keyword{datasets}

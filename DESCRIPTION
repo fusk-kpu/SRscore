@@ -13,13 +13,15 @@ Authors@R: c(person(given = "Yusuke",
 Maintainer: Yusuke Fukuda <s823631038@kpu.ac.jp>
 Description: Stress Response score (SRscore) is a stress responsiveness 
     measure for transcriptome datasets and is based on the vote-counting 
-    method. The SRscore is determined to evaluate and scores genes on the 
+    method. The SRscore is determined to evaluate and score genes on the 
     basis of the consistency of the direction of their regulation 
-    (Up-regulation, Down-regulation, or No changed) under stress conditions 
-    across the analyzed, multiple research projects. This package is based on 
-    the HN-score of Tamura and Bono (2022) <doi:10.3390/life12071079>, and can calculate both 
-    the original method and the calculation method we have extended 
-    (Fukuda et al. 2025) <doi:10.1093/plphys/kiaf105>.
+    (Up-regulation, Down-regulation, or No change) under stress conditions 
+    across multiple analyzed research projects. This package is based on 
+    the HN-score (score based on the ratio of gene expression between
+    hypoxic and normoxic conditions) proposed by 
+    Tamura and Bono (2022) <doi:10.3390/life12071079>, and can calculate both 
+    the original method and an extended calculation method described in 
+    Fukuda et al. (2025) <doi:10.1093/plphys/kiaf105>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
