@@ -1,0 +1,19 @@
+name: Dockerfile Build Check
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docker-build-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Dockerfile_cran
+        run: docker build -f Dockerfile_cran -t test_cran .
+        
+      - name: Build Dockerfile_remote
+        run: docker build -f Dockerfile_remote -t test_remote .
