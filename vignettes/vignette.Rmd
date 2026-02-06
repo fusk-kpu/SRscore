@@ -51,8 +51,8 @@ We developed the R package *SRscore* to facilitate a simple and intuitive transc
 
 # Installation
 ```{r install}
-# library(devtools)
-# install_github("fusk-kpu/SRscore", build_vignettes = TRUE)
+# library(remotes)
+# remotes::install_github("fusk-kpu/SRscore", build_vignettes = TRUE)
 library(SRscore)
 ```
 
