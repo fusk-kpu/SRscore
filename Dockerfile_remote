@@ -1,0 +1,17 @@
+FROM ubuntu:24.04
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update indices, install helper packages, add signing key, add CRAN repo, and install R
+RUN apt update -qq && \
+    apt install -y --no-install-recommends software-properties-common dirmngr wget && \
+    wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc && \
+    add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" && \
+    apt install -y --no-install-recommends r-base && \
+    apt install -y libcurl4-openssl-dev libssl-dev libxml2-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libwebp-dev pkg-config && \
+    apt install -y build-essential gfortran libcairo2-dev libglpk-dev pandoc libmagick++-dev && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy and run install.R
+COPY install_remote.R /tmp/install_remote.R
+RUN Rscript /tmp/install_remote.R
