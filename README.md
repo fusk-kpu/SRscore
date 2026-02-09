@@ -86,6 +86,7 @@ if (pandoc_path != "") {
 }
 ```
 
+NOTE: option "build_vignettes = FALSE" is highly recommended.
 
 Documents
 ------------
