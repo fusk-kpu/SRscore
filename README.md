@@ -88,6 +88,45 @@ if (pandoc_path != "") {
 
 NOTE: option "build_vignettes = FALSE" is highly recommended.
 
+### Troubleshooting: Optional Dependencies and Restricted Environments
+
+In some computing environments—particularly headless Linux systems, Conda-based setups, or servers with limited user permissions—installation of optional packages used in example workflows (e.g., enrichment analysis with clusterProfiler) may fail.
+
+Please note that these packages are not required for the core functionality of *SRscore*. The *SRscore* package itself can be installed and used independently of these optional dependencies.
+
+Installation failures of optional packages may occur due to:
+
+- Missing system-level libraries (e.g., BLAS/OpenBLAS, graphics or font libraries)
+
+- Restricted write permissions to system library paths
+
+- Differences between CRAN and Bioconductor dependency versions
+
+- Minimal or containerized Linux environments
+
+If such issues arise, we recommend the following:
+
+Install *SRscore* from CRAN using the standard command:
+
+```R
+install.packages("SRscore")
+```
+
+Skip building vignettes or optional examples:
+
+```R
+remotes::install_github("fusk-kpu/SRscore", build_vignettes = FALSE)
+```
+
+Install optional Bioconductor packages only if needed:
+
+```R
+install.packages("BiocManager")
+BiocManager::install("clusterProfiler")
+```
+
+In restricted environments, it may also be necessary to install additional system libraries or use a user-level R library path.
+
 Documents
 ------------
 ```R
