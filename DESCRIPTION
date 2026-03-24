@@ -6,11 +6,11 @@ Author: Yusuke Fukuda [aut, cre], Atsushi Fukushima [aut]
 Authors@R: c(person(given = "Yusuke",
                     family = "Fukuda",
                     role = c("aut", "cre"),
-                    email = "s823631038@kpu.ac.jp"),
+                    email = "ysk420140@gmail.com"),
               person(given = "Atsushi",
                     family = "Fukushima",
                     role = "aut"))
-Maintainer: Yusuke Fukuda <s823631038@kpu.ac.jp>
+Maintainer: Yusuke Fukuda <ysk420140@gmail.com>
 Description: Stress Response score (SRscore) is a stress responsiveness 
     measure for transcriptome datasets and is based on the vote-counting 
     method. The SRscore is determined to evaluate and score genes on the 
